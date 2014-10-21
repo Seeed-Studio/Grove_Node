@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    tools:context=".GroveNode" >
+
+    <Button
+        android:id="@+id/connect_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:text="Connect" >
+
+        <requestFocus />
+    </Button>
+
+    <TextView
+        android:id="@+id/output_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:text="HIGH"
+        android:textSize="32sp" />
+
+    <Button
+        android:id="@+id/configure_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/connect_button"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="16dp"
+        android:text="Configure" />
+
+    <TextView
+        android:id="@+id/data_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="12.3"
+        android:textSize="80sp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/data_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp" >
+
+        <TextView
+            android:id="@+id/TextView04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="24dp"
+            android:text="if"
+            android:textColor="#666666"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="24dp"
+            android:text="%"
+            android:textColor="#666666"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/operator_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text=">"
+            android:textColor="#666666"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/base_data_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:clickable="true"
+            android:text="50"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/TextView03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:text="then"
+            android:textColor="#666666"
+            android:textSize="32sp" />
+    </LinearLayout>
+
+</RelativeLayout>

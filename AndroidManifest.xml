@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.seeedstudio.ble.node"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.seeedstudio.ble.node.DeviceListActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <service
+            android:name="com.seeedstudio.ble.node.UartService"
+            android:enabled="true" />
+
+        <activity
+            android:name="com.seeedstudio.ble.node.NodeActivity"
+            android:label="@string/title_activity_node" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.SensorListActivity"
+            android:label="@string/title_activity_sensor_list" >
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.TemperatureSensorActivity"
+            android:label="@string/title_activity_temperature_sensor" >
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.ActuatorListActivity"
+            android:label="@string/title_activity_actuator_list" >
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.LedActivity"
+            android:label="@string/title_activity_led" >
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.AnalogSensorActivity"
+            android:label="@string/title_activity_analog_sensor" >
+        </activity>
+    </application>
+
+</manifest>

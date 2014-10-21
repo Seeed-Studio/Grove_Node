@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Space
+        android:id="@+id/nodeLayoutCenterSpace"
+        android:layout_width="24dp"
+        android:layout_height="64dp"
+        android:layout_centerInParent="true" />
+
+    <FrameLayout
+        android:id="@+id/FrameLayout3"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_alignBottom="@+id/nodeLayoutCenterSpace"
+        android:layout_alignRight="@+id/nodeLayoutCenterSpace" >
+
+        <ImageView
+            android:id="@+id/nodeImageView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/green" />
+
+        <TextView
+            android:id="@+id/nodeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/node"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <ImageView
+        android:layout_width="52dp"
+        android:layout_height="62dp"
+        android:layout_alignBottom="@+id/FrameLayout3"
+        android:layout_alignLeft="@+id/FrameLayout3"
+        android:layout_marginBottom="110dp"
+        android:layout_marginLeft="100dp"
+        android:src="@drawable/line" />
+
+    <ImageView
+        android:layout_width="52dp"
+        android:layout_height="62dp"
+        android:layout_alignLeft="@+id/FrameLayout3"
+        android:layout_alignTop="@+id/FrameLayout3"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="110dp"
+        android:src="@drawable/line2" />
+
+    <FrameLayout
+        android:id="@+id/FrameLayout1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_above="@+id/FrameLayout3"
+        android:layout_marginBottom="32dp"
+        android:layout_marginLeft="6dp"
+        android:layout_toRightOf="@+id/FrameLayout3" >
+
+        <TextView
+            android:id="@+id/sensorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/sensor"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/sensorImageView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/yellow" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/FrameLayout2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/FrameLayout3"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="32dp"
+        android:layout_toRightOf="@+id/FrameLayout3" >
+
+        <ImageView
+            android:id="@+id/actuatorImageView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/blue" />
+
+        <TextView
+            android:id="@+id/actuatorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/actuator"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/connect" />
+
+</RelativeLayout>
