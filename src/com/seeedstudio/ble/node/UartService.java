@@ -252,6 +252,10 @@ public class UartService extends Service {
         mBluetoothGatt.disconnect();
        // mBluetoothGatt.close();
     }
+    
+    public int getConnectionState() {
+    	return mConnectionState;
+    }
 
     /**
      * After using a given BLE device, the app must call this method to ensure resources are

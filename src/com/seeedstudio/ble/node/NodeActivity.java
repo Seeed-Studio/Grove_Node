@@ -26,7 +26,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class NodeActivity extends Activity {
-	private static final String TAG = "NODE";
+	private static final String TAG = "Node";
 
 	private static final int REQUEST_SELECT_DEVICE = 1;
 	private static final int REQUEST_ENABLE_BT = 2;
@@ -52,7 +52,7 @@ public class NodeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.node);
-		
+
 		Log.v(TAG, "onCreate");
 
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -70,28 +70,30 @@ public class NodeActivity extends Activity {
 		sensorImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(NodeActivity.this, SensorListActivity.class);
+				Intent intent = new Intent(NodeActivity.this,
+						SensorListActivity.class);
 				startActivity(intent);
 			}
 		});
-		
+
 		actuatorImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(NodeActivity.this, ActuatorListActivity.class);
+				Intent intent = new Intent(NodeActivity.this,
+						ActuatorListActivity.class);
 				startActivity(intent);
 			}
 		});
-		
+
 		nodeImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(NodeActivity.this, ActuatorListActivity.class);
+				Intent intent = new Intent(NodeActivity.this,
+						MapActivity.class);
 				startActivity(intent);
 			}
 		});
-		
-		
+
 		mConnectButton = (Button) findViewById(R.id.connectButton);
 		// Handler Disconnect & Connect button
 		mConnectButton.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +105,17 @@ public class NodeActivity extends Activity {
 							BluetoothAdapter.ACTION_REQUEST_ENABLE);
 					startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 				} else {
-					if (mConnectButton.getText().equals("Connect")) {
+
+					Log.d(TAG, "Button onClick - ");
+					if (mService == null) {
+						Log.d(TAG, "Service is Null");
+					} else {
+						Log.d(TAG,
+								"Service State : "
+										+ mService.getConnectionState());
+					}
+
+					if (mService == null || mService.getConnectionState() == 0) {
 
 						// Connect button pressed, open DeviceListActivity
 						// class, with popup windows that scan for devices
@@ -113,10 +125,8 @@ public class NodeActivity extends Activity {
 						startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
 					} else {
 						// Disconnect button pressed
-						if (mDevice != null) {
-							mService.disconnect();
+						mService.disconnect();
 
-						}
 					}
 				}
 			}
@@ -130,17 +140,29 @@ public class NodeActivity extends Activity {
 		public void onServiceConnected(ComponentName className,
 				IBinder rawBinder) {
 			mService = ((UartService.LocalBinder) rawBinder).getService();
+
 			Log.d(TAG, "onServiceConnected mService= " + mService);
 			if (!mService.initialize()) {
 				Log.e(TAG, "Unable to initialize Bluetooth");
 				finish();
 			}
 
+			runOnUiThread(new Runnable() {
+				public void run() {
+					if (mService.getConnectionState() != 2) {
+						mConnectButton.setText("Connect");
+					} else {
+						mConnectButton.setText("Disconnect");
+					}
+				}
+			});
+
 		}
 
 		public void onServiceDisconnected(ComponentName classname) {
+			Log.d(TAG, "onServiceDisconnected");
 			// // mService.disconnect(mDevice);
-			mService = null;
+			// mService = null;
 		}
 	};
 
@@ -201,6 +223,7 @@ public class NodeActivity extends Activity {
 					public void run() {
 						try {
 							String rxString = new String(rxValue, "UTF-8");
+							Log.d(TAG, "RX: " + rxString);
 						} catch (Exception e) {
 							Log.e(TAG, e.toString());
 						}
@@ -220,8 +243,6 @@ public class NodeActivity extends Activity {
 		Intent bindIntent = new Intent(this, UartService.class);
 		bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
-		LocalBroadcastManager.getInstance(this).registerReceiver(
-				UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
 	}
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
@@ -244,6 +265,15 @@ public class NodeActivity extends Activity {
 					BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		}
+
+		LocalBroadcastManager.getInstance(this).registerReceiver(
+				UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
+
+		// if (mService == null || mService.getConnectionState() != 2) {
+		// mConnectButton.setText("Connect");
+		// } else {
+		// mConnectButton.setText("Disconnect");
+		// }
 	}
 
 	@Override
@@ -251,12 +281,25 @@ public class NodeActivity extends Activity {
 		super.onPause();
 		Log.v(TAG, "onPause");
 
-		if (mConnected) {
-			mConnected = false;
-			if (mDevice != null) {
-				mService.disconnect();
-			}
-		}
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(
+				UARTStatusChangeReceiver);
+
+		// if (mConnected) {
+		// mConnected = false;
+		// if (mDevice != null) {
+		// mService.disconnect();
+		// }
+		// }
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		Log.v(TAG, "onDestroy");
+
+		Intent intent = new Intent(this, UartService.class);
+		stopService(intent);
 	}
 
 	@Override
@@ -306,6 +349,7 @@ public class NodeActivity extends Activity {
 			startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(startMain);
 			showMessage("NODE running in background.\n             Disconnect to exit");
+			Log.v(TAG, "Node is running in backgroud.");
 		}
 	}
 

@@ -61,5 +61,7 @@
     <string name="node">Node</string>
     <string name="sensor">Sensor</string>
     <string name="actuator">Actuator</string>
+    <string name="title_activity_map">Mapping</string>
+    <string name="title_activity_device_base">Device Base</string>
 
 </resources>

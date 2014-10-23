@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
-        android:text="27.3"
+        android:text= " N/A"
         android:textSize="48sp" />
 
     <ImageView
@@ -43,11 +43,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
+        android:onClick="addEvent"
         android:text="Add a event" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/event_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button1"

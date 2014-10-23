@@ -37,22 +37,48 @@
         <activity
             android:name="com.seeedstudio.ble.node.SensorListActivity"
             android:label="@string/title_activity_sensor_list" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.NodeActivity" />
         </activity>
         <activity
             android:name="com.seeedstudio.ble.node.TemperatureSensorActivity"
             android:label="@string/title_activity_temperature_sensor" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.SensorListActivity" />
         </activity>
         <activity
             android:name="com.seeedstudio.ble.node.ActuatorListActivity"
             android:label="@string/title_activity_actuator_list" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.NodeActivity" />
         </activity>
         <activity
             android:name="com.seeedstudio.ble.node.LedActivity"
             android:label="@string/title_activity_led" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.ActuatorListActivity" />
         </activity>
         <activity
             android:name="com.seeedstudio.ble.node.AnalogSensorActivity"
             android:label="@string/title_activity_analog_sensor" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.SensorListActivity" />
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.MapActivity"
+            android:label="@string/title_activity_map" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.NodeActivity" />
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.DeviceBaseActivity"
+            android:label="@string/title_activity_device_base" >
         </activity>
     </application>
 

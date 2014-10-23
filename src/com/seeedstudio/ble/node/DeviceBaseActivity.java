@@ -1,14 +1,11 @@
 package com.seeedstudio.ble.node;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -19,18 +16,13 @@ import android.os.Message;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class AnalogSensorActivity extends Activity {
-	private static final String TAG = "Node Analog Sensor";
+public class DeviceBaseActivity extends Activity {
+	private static final String TAG = "Node Device Base";
 
 	private static final int REQUEST_SELECT_DEVICE = 1;
 	private static final int REQUEST_ENABLE_BT = 2;
@@ -45,109 +37,16 @@ public class AnalogSensorActivity extends Activity {
 	// private BluetoothDevice mDevice = null;
 	// private BluetoothAdapter mBtAdapter = null;
 	private boolean mConnected = false;
-
-	private TextView mDataTextView;
-	private ListView mEventListView;
-
-	private ArrayAdapter<String> mListAdapter;
-	private ArrayList<String> mEventNameList;
-
-	private DataCenter mDataCenter;
-
+	
+	protected DataCenter mDataCenter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		setContentView(R.layout.analog_sensor);
-
+		
 		mDataCenter = DataCenter.getInstance();
 
-		mDataTextView = (TextView) findViewById(R.id.data_text_view);
-		mEventListView = (ListView) findViewById(R.id.event_list_view);
-		
-		mEventNameList = (ArrayList<String>) mDataCenter.getEventNameList().clone();
-
-		mListAdapter = new ArrayAdapter<String>(this, R.layout.device_row,
-				mEventNameList);
-
-
-		mEventListView.setAdapter(mListAdapter);
-
 		service_init();
-	}
-
-	public void addEvent(View v) {
-		LayoutInflater li = LayoutInflater.from(this);
-		View promptsView = li.inflate(R.layout.add_event, null);
-
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-		alertDialogBuilder.setView(promptsView);
-
-		final TextView typeTextView = (TextView) promptsView
-				.findViewById(R.id.event_type_text_view);
-
-		final TextView conditionTextView = (TextView) promptsView
-				.findViewById(R.id.event_condition_text_view);
-
-		typeTextView.setText("x");
-
-		conditionTextView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String condition = conditionTextView.getText().toString();
-				if (condition.equals(">")) {
-					condition = "<";
-				} else if (condition.equals("<")) {
-					condition = "=";
-				} else {
-					condition = ">";
-				}
-
-				conditionTextView.setText(condition);
-			}
-		});
-
-		final TextView valueTextView = (TextView) promptsView
-				.findViewById(R.id.event_value_edit_text);
-		// set dialog message
-		alertDialogBuilder
-				.setTitle("Add a event")
-				.setCancelable(false)
-				.setPositiveButton("Add",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// get user input and set it to result
-								// edit text
-								// String name =
-								// nameEditText.getText().toString();
-								String condition = conditionTextView.getText()
-										.toString();
-								String value = valueTextView.getText()
-										.toString();
-								String equation = "x" + condition + value;
-								SensorEvent event = new SensorEvent();
-								event.type = 0;
-								event.condition = condition.charAt(0);
-								event.value = Float.parseFloat(value);
-								mDataCenter.addEvent(equation, event);
-								int n = mDataCenter.getEventNumber();
-
-								mListAdapter.add(equation);
-							}
-						})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-							}
-						});
-
-		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
 	}
 
 	// UART service connected/disconnected
@@ -222,20 +121,7 @@ public class AnalogSensorActivity extends Activity {
 						.getByteArrayExtra(UartService.EXTRA_DATA);
 				runOnUiThread(new Runnable() {
 					public void run() {
-						try {
-							String rxString = new String(rxValue, "UTF-8");
-							Log.d(TAG, "RX: " + rxString);
-
-							String[] slices = rxString.split(" ");
-							if (slices[0].equals("i") && (slices.length == 3)) {
-								int dimention = Integer.parseInt(slices[1]);
-								double value = Float.parseFloat(slices[2]);
-								value = ((int) (value * 10)) / 10.0;
-								mDataTextView.setText(String.valueOf(value));
-							}
-						} catch (UnsupportedEncodingException e) {
-							Log.e(TAG, e.toString());
-						}
+						 onDeviceDataReceived(rxValue);
 					}
 				});
 			}
@@ -299,15 +185,31 @@ public class AnalogSensorActivity extends Activity {
 			Intent intent = new Intent(this, NodeActivity.class);
 			startActivity(intent);
 			return true;
-		} else if (id == android.R.id.home) {
-	        NavUtils.navigateUpFromSameTask(this);
-	        return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void showMessage(String msg) {
+	protected void showMessage(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
 	}
+	
+	protected boolean configureDevice(byte[] packet) {
+		if (mService == null || mService.getConnectionState() != 2) {
+			return false;
+		}
+		
+		mService.writeRXCharacteristic(packet);
+		return true;
+	}
+	
+	protected void onDeviceDataReceived(byte[] data) {
+		try {
+			String rxString = new String(data, "UTF-8");
+			Log.d(TAG, "RX: " + rxString);
+		} catch (UnsupportedEncodingException e) {
+			Log.e(TAG, e.toString());
+		}
+	}
+
 }
