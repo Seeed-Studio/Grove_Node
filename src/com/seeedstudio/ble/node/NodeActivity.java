@@ -115,7 +115,8 @@ public class NodeActivity extends Activity {
 										+ mService.getConnectionState());
 					}
 
-					if (mService == null || mService.getConnectionState() == 0) {
+//					if (mService == null || mService.getConnectionState() == 0) {
+					if (mConnectButton.getText().toString().equals("Connect")) {
 
 						// Connect button pressed, open DeviceListActivity
 						// class, with popup windows that scan for devices
@@ -125,7 +126,9 @@ public class NodeActivity extends Activity {
 						startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
 					} else {
 						// Disconnect button pressed
-						mService.disconnect();
+						if (mService != null) {
+							mService.disconnect();
+						}
 
 					}
 				}
@@ -203,7 +206,8 @@ public class NodeActivity extends Activity {
 						Log.d(TAG, "UART_DISCONNECT_MSG");
 						mConnectButton.setText("Connect");
 						mState = UART_PROFILE_DISCONNECTED;
-						mService.close();
+//						mService.close();
+//						mService = null;
 						// setUiState();
 
 					}

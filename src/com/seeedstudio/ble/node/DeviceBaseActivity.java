@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
@@ -40,11 +39,18 @@ public class DeviceBaseActivity extends Activity {
 	
 	protected DataCenter mDataCenter;
 	
+	private int mServiceState;
+	
+	private int mReconnectTry;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		mDataCenter = DataCenter.getInstance();
+		
+		mServiceState = -1;
+		mReconnectTry = 0;
 
 		service_init();
 	}
@@ -54,10 +60,17 @@ public class DeviceBaseActivity extends Activity {
 		public void onServiceConnected(ComponentName className,
 				IBinder rawBinder) {
 			mService = ((UartService.LocalBinder) rawBinder).getService();
+			
 			Log.d(TAG, "onServiceConnected mService= " + mService);
 			if (!mService.initialize()) {
 				Log.e(TAG, "Unable to initialize Bluetooth");
 				finish();
+			}
+			
+			int state = mService.getConnectionState();
+			if (state != mServiceState) {
+				mServiceState = state;
+				onServiceStateChanged(state);
 			}
 
 		}
@@ -65,6 +78,7 @@ public class DeviceBaseActivity extends Activity {
 		public void onServiceDisconnected(ComponentName classname) {
 			// // mService.disconnect(mDevice);
 			mService = null;
+			mServiceState = -1;
 		}
 	};
 
@@ -86,6 +100,13 @@ public class DeviceBaseActivity extends Activity {
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
 				Log.d(TAG, "Connected to device");
 				mConnected = true;
+				mReconnectTry = 0;
+				
+				int state = mService.getConnectionState();
+				if (state != mServiceState) {
+					mServiceState = state;
+					onServiceStateChanged(state);
+				}
 
 				runOnUiThread(new Runnable() {
 					public void run() {
@@ -99,15 +120,32 @@ public class DeviceBaseActivity extends Activity {
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				Log.d(TAG, "Disconnected");
 				mConnected = false;
-				runOnUiThread(new Runnable() {
-					public void run() {
-						Log.d(TAG, "UART_DISCONNECT_MSG");
-						mState = UART_PROFILE_DISCONNECTED;
-						mService.close();
-						// setUiState();
-
+				int state = mService.getConnectionState();
+				if (state != mServiceState) {
+					mServiceState = state;
+					onServiceStateChanged(state);
+				}
+				
+				if (mReconnectTry <= 3) {
+					mReconnectTry++;
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				});
+					mService.connect();
+				} else {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							Log.d(TAG, "UART_DISCONNECT_MSG");
+							mState = UART_PROFILE_DISCONNECTED;
+							mService.close();
+							// setUiState();
+	
+						}
+					});
+				}
 			}
 
 			// *********************//
@@ -210,6 +248,10 @@ public class DeviceBaseActivity extends Activity {
 		} catch (UnsupportedEncodingException e) {
 			Log.e(TAG, e.toString());
 		}
+	}
+	
+	protected void onServiceStateChanged(int state) {
+		
 	}
 
 }

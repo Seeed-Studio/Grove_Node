@@ -28,11 +28,11 @@ public class LedActivity extends DeviceBaseActivity {
 		setContentView(R.layout.led);
 		
 		float[] onParam = new float[1];
-		onParam[0] = 1;
+		onParam[0] = 0;
 		mDataCenter.addAction("On", onParam);
 		
 		float[] offParam = new float[1];
-		offParam[0] = 0;
+		offParam[0] = 1;
 		mDataCenter.addAction("Off", offParam);
 		
 		float[] blinkParams = new float[2];
@@ -75,5 +75,27 @@ public class LedActivity extends DeviceBaseActivity {
 	        return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onServiceStateChanged(int state) {
+//		super.onServiceStateChanged(state);
+		
+		if (state == 2) {
+			ArrayList<float[]> actionList = mDataCenter.getActionDataList();
+			int actionNumber = actionList.size();
+			for (int i = 0; i < actionNumber; i++) {
+				String command = "f " + i;
+				float[] data = actionList.get(i);
+				for (int j = 0; j < data.length; j++) {
+					command += " " + Float.toString(data[j]);
+				}
+				
+				configureDevice(command.getBytes());
+				
+				Log.v(TAG, "Sending: " + command);
+				
+			}
+		}
 	}
 }

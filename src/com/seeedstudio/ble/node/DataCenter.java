@@ -170,4 +170,8 @@ public class DataCenter {
 	public ArrayList<String> getActionNameList() {
 		return mActionNameList;
 	}
+	
+	public ArrayList<float[]> getActionDataList() {
+		return mActionDataList;
+	}
 }

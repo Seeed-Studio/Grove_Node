@@ -7,6 +7,6 @@ public class SensorEvent {
 	
 	@Override
 	public String toString() {
-		return type + " " + condition + Float.toString(value);
+		return type + " " + condition + " " + Float.toString(value);
 	}
 }

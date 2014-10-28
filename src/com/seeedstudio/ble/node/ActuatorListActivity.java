@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ActuatorListActivity extends DeviceBaseActivity {
-	public String[] actuators = new String[] { "LED", "Chainable LED" };
+	public String[] actuators = new String[] { "LED" };
 
 	private ListView actuatorListView;
 	private ArrayAdapter<String> listAdapter;

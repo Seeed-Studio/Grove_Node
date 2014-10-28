@@ -46,6 +46,7 @@ public class UartService extends Service {
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
+    private String mLastConnectedAddress = null;
     private BluetoothGatt mBluetoothGatt;
     private int mConnectionState = STATE_DISCONNECTED;
 
@@ -86,6 +87,7 @@ public class UartService extends Service {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
+                mLastConnectedAddress = mBluetoothDeviceAddress;
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
@@ -236,6 +238,14 @@ public class UartService extends Service {
         mBluetoothDeviceAddress = address;
         mConnectionState = STATE_CONNECTING;
         return true;
+    }
+    
+    public boolean connect() {
+    	if (mLastConnectedAddress != null) {
+    		return connect(mLastConnectedAddress);
+    	}
+    	
+    	return false;
     }
 
     /**

@@ -1,9 +1,11 @@
 package com.seeedstudio.ble.node;
 
+
 import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 public class MapActivity extends DeviceBaseActivity {
-
+	private static final String TAG = "Node Mapping";
 	
 	private Spinner mEventSpinner;
 	private Spinner mActionSpinner;
@@ -48,8 +50,20 @@ public class MapActivity extends DeviceBaseActivity {
 	}
 	
 	public void onAddButtonClick(View v) {
-		String ifttt = "if " + mEventSpinner.getSelectedItem().toString() + " then " + mActionSpinner.getSelectedItem().toString();
-		mListAdapter.add(ifttt);
+		String eventName = mEventSpinner.getSelectedItem().toString();
+		String actionName = mActionSpinner.getSelectedItem().toString();
+		String ifttt = "if " + eventName + " then " + actionName;
+		if (0 > mListAdapter.getPosition(ifttt)) {
+			mListAdapter.add(ifttt);
+		}
+		
+		int eventIndex = mDataCenter.getEventIndex(eventName);
+		int actionIndex = mDataCenter.getActionIndex(actionName);
+		
+		String command = "m " + eventIndex + " " + actionIndex;
+		configureDevice(command.getBytes());
+		
+		Log.v(TAG, "Mapping: " + command);
 	}
 	
 	@Override

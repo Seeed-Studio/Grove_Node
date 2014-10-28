@@ -103,7 +103,7 @@ public class TemperatureSensorActivity extends DeviceBaseActivity {
 								int n = mDataCenter.getEventNumber();
 								mDataCenter.addEvent(equation, event);
 								
-								String command = "e " + event.toString(); 
+								String command = "e " + n + " " + event.toString();
 								configureDevice(command.getBytes());
 
 								mListAdapter
@@ -124,6 +124,7 @@ public class TemperatureSensorActivity extends DeviceBaseActivity {
 		alertDialog.show();
 	}
 
+	@Override
 	protected void onDeviceDataReceived(byte[] data) {
 		String rxString = null;
 		try {
