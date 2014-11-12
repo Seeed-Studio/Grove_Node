@@ -16,7 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ActuatorListActivity extends DeviceBaseActivity {
-	public String[] actuators = new String[] { "LED" };
+	private String[] actuators = new String[] { "Switch", "LED", "Color Pixels" };
+	private Class<?>[] actuator_ativities = {SwitchActivity.class, LedActivity.class, ColorPixelsActivity.class};
 
 	private ListView actuatorListView;
 	private ArrayAdapter<String> listAdapter;
@@ -49,10 +50,8 @@ public class ActuatorListActivity extends DeviceBaseActivity {
 							int position, long id) {
 						Class<?> activity = null;
 
-						if (position == 0) {
-							activity = LedActivity.class;
-						} else if (position == 1) {
-							activity = LedActivity.class;
+						if (position < actuator_ativities.length) {
+							activity = actuator_ativities[position];
 						} else {
 							activity = LedActivity.class;
 						}

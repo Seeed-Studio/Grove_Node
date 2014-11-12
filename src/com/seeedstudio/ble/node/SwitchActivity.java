@@ -14,31 +14,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class LedActivity extends DeviceBaseActivity {
-	private static final String TAG = "Node LED";
+public class SwitchActivity extends DeviceBaseActivity {
+	private static final String TAG = "Node Switch";
 	
 	private ListView actionListView;
 	private ArrayAdapter<String> listAdapter;
-	private String[] actions = {"ON", "OFF"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		setContentView(R.layout.led);
+		setContentView(R.layout.switch_layout);
 		
 		float[] onParam = new float[1];
-		onParam[0] = 0;
+		onParam[0] = 1;
 		mDataCenter.addAction("On", onParam);
 		
 		float[] offParam = new float[1];
-		offParam[0] = 1;
+		offParam[0] = 0;
 		mDataCenter.addAction("Off", offParam);
-		
-		float[] blinkParams = new float[2];
-		blinkParams[0] = (float)0.5;
-		blinkParams[1] = 1;
-		mDataCenter.addAction("Blink", blinkParams);
 		
 		ArrayList<String> actionList = (ArrayList<String>) mDataCenter.getActionNameList().clone();
 		listAdapter = new ArrayAdapter<String>(this, R.layout.device_row, actionList);

@@ -80,6 +80,20 @@
             android:name="com.seeedstudio.ble.node.DeviceBaseActivity"
             android:label="@string/title_activity_device_base" >
         </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.SwitchActivity"
+            android:label="@string/title_activity_switch" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.ActuatorListActivity" />
+        </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.ColorPixelsActivity"
+            android:label="@string/title_activity_color_pixels" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.ActuatorListActivity" />
+        </activity>
     </application>
 
 </manifest>

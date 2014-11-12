@@ -1,13 +1,11 @@
 package com.seeedstudio.ble.node;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -21,8 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NodeActivity extends Activity {
@@ -44,15 +44,29 @@ public class NodeActivity extends Activity {
 
 	private Button mConnectButton;
 
-	private ImageView sensorImageView;
-	private ImageView nodeImageView;
-	private ImageView actuatorImageView;
+	private ImageView mSensorImageView;
+	private ImageView mNodeImageView;
+	private ImageView mActuatorImageView;
+	
+	private FrameLayout mSensorHintLayout;
+	private FrameLayout mNodeHintLayout;
+	private FrameLayout mActuatorHintLayout;
+	
+	private TextView    mSensorTextView;
+	private TextView    mSensorHintTextView;
+	
+	private DataCenter mDataCenter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.node);
-
+		
+		mSensorHintLayout = (FrameLayout) findViewById(R.id.sensor_hint_layout);
+		mActuatorHintLayout = (FrameLayout) findViewById(R.id.actuator_hint_layout);
+		mSensorTextView = (TextView)findViewById(R.id.sensor_text_view); 
+		mSensorHintTextView = (TextView)findViewById(R.id.sensor_hint_text_view); 
+		
 		Log.v(TAG, "onCreate");
 
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -63,11 +77,11 @@ public class NodeActivity extends Activity {
 			return;
 		}
 
-		sensorImageView = (ImageView) findViewById(R.id.sensorImageView);
-		nodeImageView = (ImageView) findViewById(R.id.nodeImageView);
-		actuatorImageView = (ImageView) findViewById(R.id.actuatorImageView);
+		mSensorImageView = (ImageView) findViewById(R.id.sensor_select_image_view);
+		mNodeImageView = (ImageView) findViewById(R.id.node_image_view);
+		mActuatorImageView = (ImageView) findViewById(R.id.actuator_select_image_view);
 
-		sensorImageView.setOnClickListener(new View.OnClickListener() {
+		mSensorImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(NodeActivity.this,
@@ -76,7 +90,7 @@ public class NodeActivity extends Activity {
 			}
 		});
 
-		actuatorImageView.setOnClickListener(new View.OnClickListener() {
+		mActuatorImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(NodeActivity.this,
@@ -85,7 +99,7 @@ public class NodeActivity extends Activity {
 			}
 		});
 
-		nodeImageView.setOnClickListener(new View.OnClickListener() {
+		mNodeImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(NodeActivity.this,
@@ -94,7 +108,7 @@ public class NodeActivity extends Activity {
 			}
 		});
 
-		mConnectButton = (Button) findViewById(R.id.connectButton);
+		mConnectButton = (Button) findViewById(R.id.connect_button);
 		// Handler Disconnect & Connect button
 		mConnectButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -115,7 +129,6 @@ public class NodeActivity extends Activity {
 										+ mService.getConnectionState());
 					}
 
-//					if (mService == null || mService.getConnectionState() == 0) {
 					if (mConnectButton.getText().toString().equals("Connect")) {
 
 						// Connect button pressed, open DeviceListActivity
@@ -154,6 +167,10 @@ public class NodeActivity extends Activity {
 				public void run() {
 					if (mService.getConnectionState() != 2) {
 						mConnectButton.setText("Connect");
+						
+//						Intent newIntent = new Intent(NodeActivity.this,
+//								DeviceListActivity.class);
+//						startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
 					} else {
 						mConnectButton.setText("Disconnect");
 					}
@@ -228,6 +245,16 @@ public class NodeActivity extends Activity {
 						try {
 							String rxString = new String(rxValue, "UTF-8");
 							Log.d(TAG, "RX: " + rxString);
+							
+							String[] slices = rxString.split(" ");
+							if (slices[0].equals("i") && (slices.length == 3)) {
+								int dimention = Integer.parseInt(slices[1]);
+								double value = Float.parseFloat(slices[2]);
+								value = ((int) (value * 10)) / 10.0;
+								if (mDataCenter.getSensorId() != -1) {
+									mSensorHintTextView.setText(String.valueOf(value));
+								}
+							}
 						} catch (Exception e) {
 							Log.e(TAG, e.toString());
 						}
@@ -278,6 +305,22 @@ public class NodeActivity extends Activity {
 		// } else {
 		// mConnectButton.setText("Disconnect");
 		// }
+		
+		mDataCenter = DataCenter.getInstance();
+		if (mDataCenter.getSensorId() == -1) {
+			mSensorHintLayout.setVisibility(View.VISIBLE);
+		} else {
+			if (mDataCenter.getActuatorId() == -1) {
+				mActuatorHintLayout.setVisibility(View.VISIBLE);
+				mSensorHintLayout.setVisibility(View.INVISIBLE);
+			} else {
+				mActuatorHintLayout.setVisibility(View.INVISIBLE);
+				mSensorHintLayout.setVisibility(View.VISIBLE);
+				if (mSensorHintTextView.getText().toString().equals("Select a")) {
+					mSensorHintTextView.setText("N/A");
+				}
+			}
+		}
 	}
 
 	@Override

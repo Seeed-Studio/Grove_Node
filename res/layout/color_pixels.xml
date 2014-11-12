@@ -8,15 +8,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.seeedstudio.ble.node.TemperatureSensorActivity$PlaceholderFragment" >
 
-    <ImageView
-        android:id="@+id/led_image_view"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+    <com.larswerkman.holocolorpicker.ColorPicker
+        android:id="@+id/color_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
-        android:src="@drawable/lightbulb" />
+        android:layout_centerInParent="true"
+        android:layout_gravity="center" />
 
+    <com.larswerkman.holocolorpicker.SVBar
+        android:id="@+id/svbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/color_picker"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center" />
 
     <Button
         android:id="@+id/add_action_button"

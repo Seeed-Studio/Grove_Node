@@ -69,8 +69,6 @@ public class DeviceListActivity extends Activity {
     private Handler mHandler;
     private boolean mScanning;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	

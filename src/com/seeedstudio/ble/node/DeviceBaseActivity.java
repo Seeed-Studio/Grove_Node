@@ -126,16 +126,17 @@ public class DeviceBaseActivity extends Activity {
 					onServiceStateChanged(state);
 				}
 				
-				if (mReconnectTry <= 3) {
-					mReconnectTry++;
-					try {
-						Thread.sleep(300);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					mService.connect();
-				} else {
+//				if (mReconnectTry <= 3) {
+//					mReconnectTry++;
+//					try {
+//						Thread.sleep(300);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					mService.connect();
+//				} else 
+				{
 					runOnUiThread(new Runnable() {
 						public void run() {
 							Log.d(TAG, "UART_DISCONNECT_MSG");

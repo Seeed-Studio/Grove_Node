@@ -63,5 +63,7 @@
     <string name="actuator">Actuator</string>
     <string name="title_activity_map">Mapping</string>
     <string name="title_activity_device_base">Device Base</string>
+    <string name="title_activity_switch">Switch</string>
+    <string name="title_activity_color_pixels">Color Pixels</string>
 
 </resources>

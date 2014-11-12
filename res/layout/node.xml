@@ -10,20 +10,20 @@
         android:layout_centerInParent="true" />
 
     <FrameLayout
-        android:id="@+id/FrameLayout3"
+        android:id="@+id/node_layout"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_alignBottom="@+id/nodeLayoutCenterSpace"
         android:layout_alignRight="@+id/nodeLayoutCenterSpace" >
 
         <ImageView
-            android:id="@+id/nodeImageView"
+            android:id="@+id/node_image_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/green" />
 
         <TextView
-            android:id="@+id/nodeTextView"
+            android:id="@+id/node_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -36,8 +36,8 @@
     <ImageView
         android:layout_width="52dp"
         android:layout_height="62dp"
-        android:layout_alignBottom="@+id/FrameLayout3"
-        android:layout_alignLeft="@+id/FrameLayout3"
+        android:layout_alignBottom="@+id/node_layout"
+        android:layout_alignLeft="@+id/node_layout"
         android:layout_marginBottom="110dp"
         android:layout_marginLeft="100dp"
         android:src="@drawable/line" />
@@ -45,23 +45,29 @@
     <ImageView
         android:layout_width="52dp"
         android:layout_height="62dp"
-        android:layout_alignLeft="@+id/FrameLayout3"
-        android:layout_alignTop="@+id/FrameLayout3"
+        android:layout_alignLeft="@+id/node_layout"
+        android:layout_alignTop="@+id/node_layout"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="110dp"
         android:src="@drawable/line2" />
 
     <FrameLayout
-        android:id="@+id/FrameLayout1"
+        android:id="@+id/sensor_select_layout"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_above="@+id/FrameLayout3"
+        android:layout_above="@+id/node_layout"
         android:layout_marginBottom="32dp"
         android:layout_marginLeft="6dp"
-        android:layout_toRightOf="@+id/FrameLayout3" >
+        android:layout_toRightOf="@+id/node_layout" >
+
+        <ImageView
+            android:id="@+id/sensor_select_image_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/yellow" />
 
         <TextView
-            android:id="@+id/sensorTextView"
+            android:id="@+id/sensor_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -69,31 +75,25 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/sensorImageView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:src="@drawable/yellow" />
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/FrameLayout2"
+        android:id="@+id/actuator_select_layout"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_below="@+id/FrameLayout3"
+        android:layout_below="@+id/node_layout"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="32dp"
-        android:layout_toRightOf="@+id/FrameLayout3" >
+        android:layout_toRightOf="@+id/node_layout" >
 
         <ImageView
-            android:id="@+id/actuatorImageView"
+            android:id="@+id/actuator_select_image_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:src="@drawable/blue" />
 
         <TextView
-            android:id="@+id/actuatorTextView"
+            android:id="@+id/actuator_select_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
@@ -104,7 +104,7 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/connectButton"
+        android:id="@+id/connect_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -112,5 +112,54 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/connect" />
+
+    <FrameLayout
+        android:id="@+id/sensor_hint_layout"
+        android:layout_width="128dp"
+        android:layout_height="80dp"
+        android:layout_alignTop="@+id/sensor_select_layout"
+        android:layout_toLeftOf="@+id/sensor_select_layout"
+        android:visibility="visible" >
+
+        <ImageView
+            android:id="@+id/sensor_hint_image_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/hint" />
+
+        <TextView
+            android:id="@+id/sensor_hint_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="Select a"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/actuator_hint_layout"
+        android:layout_width="128dp"
+        android:layout_height="80dp"
+        android:layout_alignTop="@+id/actuator_select_layout"
+        android:layout_toLeftOf="@+id/actuator_select_layout"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/hint" />
+
+        <TextView
+            android:id="@+id/actuator_hint_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="Select a"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </FrameLayout>
 
 </RelativeLayout>
