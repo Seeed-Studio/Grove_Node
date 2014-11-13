@@ -94,6 +94,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.seeedstudio.ble.node.ActuatorListActivity" />
         </activity>
+        <activity
+            android:name="com.seeedstudio.ble.node.SensorActivity"
+            android:label="@string/title_activity_sensor" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.ble.node.SensorListActivity" />
+        </activity>
     </application>
 
 </manifest>

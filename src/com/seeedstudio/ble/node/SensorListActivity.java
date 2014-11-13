@@ -1,25 +1,21 @@
 package com.seeedstudio.ble.node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class SensorListActivity extends DeviceBaseActivity {
-	public String[] sensors = new String[] {"General Analog Sensor", "Temperature Sensor"};
 	
-	private ListView mSensorListView;
-	private ArrayAdapter<String> mListAdapter;
+	private DataCenter mDataCenter;
+	private Grove[]    mSensors;
+	private ListView   mSensorListView;
+	private GroveArrayAdapter mListAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,17 +24,12 @@ public class SensorListActivity extends DeviceBaseActivity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
+		mDataCenter = DataCenter.getInstance();
+		mSensors    = mDataCenter.getSensors();
+		mListAdapter = new GroveArrayAdapter(this, mSensors);
+		
 		// Find the ListView resource. 
 	    mSensorListView = (ListView) findViewById( R.id.sensor_list_view );
-
-	    // Create and populate a List of planet names.
-	      
-	    ArrayList<String> sensorList = new ArrayList<String>();
-	    sensorList.addAll( Arrays.asList(sensors) );
-	    
-	    // Create ArrayAdapter using the planet list.
-	    mListAdapter = new ArrayAdapter<String>(this, R.layout.device_row, sensorList);
-	    
 	    mSensorListView.setAdapter(mListAdapter);
 	    
 	    mSensorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -46,20 +37,16 @@ public class SensorListActivity extends DeviceBaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				Class<?> activity = null;
-				
-				if (position == 0) {
-					activity = AnalogSensorActivity.class;
-				} else if (position == 1) {
-					activity = TemperatureSensorActivity.class;
-				} else {
-					activity = AnalogSensorActivity.class;
+				int sensor = position;
+				if (sensor >= mSensors.length) {
+					return;
 				}
-				
+
 				String command = "s " + position;
 				configureDevice(command.getBytes());
 				mDataCenter.setSensorId(position);
-				Intent intent = new Intent(SensorListActivity.this, activity);
+				Intent intent = new Intent(SensorListActivity.this, SensorActivity.class);
+				intent.putExtra("sensor", sensor);
 				startActivity(intent);
 			}
 	    	

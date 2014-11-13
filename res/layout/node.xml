@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:text="@string/node"
-            android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
             android:textStyle="bold" />
     </FrameLayout>
@@ -38,9 +37,9 @@
         android:layout_height="62dp"
         android:layout_alignBottom="@+id/node_layout"
         android:layout_alignLeft="@+id/node_layout"
-        android:layout_marginBottom="110dp"
-        android:layout_marginLeft="100dp"
-        android:src="@drawable/line" />
+        android:layout_marginBottom="111dp"
+        android:layout_marginLeft="101dp"
+        android:src="@drawable/arrow" />
 
     <ImageView
         android:layout_width="52dp"
@@ -49,7 +48,7 @@
         android:layout_alignTop="@+id/node_layout"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="110dp"
-        android:src="@drawable/line2" />
+        android:src="@drawable/arrow3" />
 
     <FrameLayout
         android:id="@+id/sensor_select_layout"
@@ -72,7 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:text="@string/sensor"
-            android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
             android:textStyle="bold" />
     </FrameLayout>
@@ -98,7 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:text="@string/actuator"
-            android:textColor="@android:color/darker_gray"
             android:textSize="16sp"
             android:textStyle="bold" />
     </FrameLayout>
