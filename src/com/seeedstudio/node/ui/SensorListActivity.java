@@ -29,8 +29,7 @@ public class SensorListActivity extends DeviceBaseActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		mDataCenter = DataCenter.getInstance();
-		mSensors    = mDataCenter.getSensors();
-		mListAdapter = new GroveArrayAdapter(this, mSensors);
+		mListAdapter = new GroveArrayAdapter(this, mDataCenter.sensorList);
 		
 		// Find the ListView resource. 
 	    mSensorListView = (ListView) findViewById( R.id.sensor_list_view );

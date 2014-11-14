@@ -16,7 +16,7 @@ import com.seeedstudio.node.ble.DeviceBaseActivity;
 import com.seeedstudio.node.data.ActuatorAction;
 import com.seeedstudio.node.data.DataCenter;
 
-public class SwitchActivity extends DeviceBaseActivity {
+public class RelayActivity extends DeviceBaseActivity {
 	private static final String TAG = "Node Relay";
 
 	private ListView mActionListView;
@@ -27,7 +27,7 @@ public class SwitchActivity extends DeviceBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		setContentView(R.layout.switch_layout);
+		setContentView(R.layout.relay);
 
 		mActionList = mDataCenter.actuatorActionList;
 

@@ -76,8 +76,8 @@
             android:label="@string/title_activity_device_base" >
         </activity>
         <activity
-            android:name="com.seeedstudio.node.ui.SwitchActivity"
-            android:label="@string/title_activity_switch" >
+            android:name="com.seeedstudio.node.ui.RelayActivity"
+            android:label="@string/title_activity_relay" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.seeedstudio.node.ui.ActuatorListActivity" />

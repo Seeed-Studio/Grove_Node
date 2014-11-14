@@ -20,7 +20,7 @@ public class ActuatorListActivity extends DeviceBaseActivity {
 	private ListView mListView;
 	private GroveArrayAdapter mListAdapter;
 
-	private Class<?>[] actuator_ativities = { SwitchActivity.class,
+	private Class<?>[] actuator_ativities = { RelayActivity.class,
 			LedActivity.class, ColorPixelsActivity.class };
 
 	@Override
@@ -32,8 +32,7 @@ public class ActuatorListActivity extends DeviceBaseActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mDataCenter = DataCenter.getInstance();
-		mActuators = mDataCenter.getActuators();
-		mListAdapter = new GroveArrayAdapter(this, mActuators);
+		mListAdapter = new GroveArrayAdapter(this, mDataCenter.actuatorList);
 
 		// Find the ListView resource.
 		mListView = (ListView) findViewById(R.id.actuator_list_view);

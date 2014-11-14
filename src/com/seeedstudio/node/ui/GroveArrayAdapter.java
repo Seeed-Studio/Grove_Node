@@ -1,5 +1,7 @@
 package com.seeedstudio.node.ui;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,12 @@ import com.seeedstudio.node.data.Grove;
 
 public class GroveArrayAdapter extends ArrayAdapter<Grove> {
 	  private final Context context;
-	  private final Grove[] values;
+	  private final ArrayList<Grove> groves;
 
-	  public GroveArrayAdapter(Context context, Grove[] values) {
-	    super(context, R.layout.grove, values);
+	  public GroveArrayAdapter(Context context, ArrayList<Grove> groves) {
+	    super(context, R.layout.grove, groves);
 	    this.context = context;
-	    this.values = values;
+	    this.groves = groves;
 	  }
 
 	  @Override
@@ -29,8 +31,9 @@ public class GroveArrayAdapter extends ArrayAdapter<Grove> {
 	    TextView textView = (TextView) rowView.findViewById(R.id.label);
 	    ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 	    
-	    textView.setText(values[position].name);
-	    imageView.setImageResource(values[position].image);
+	    Grove grove = groves.get(position);
+	    textView.setText(grove.name);
+	    imageView.setImageResource(grove.image);
 
 	    return rowView;
 	  }
