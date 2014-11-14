@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.SVBar;
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.data.ActuatorAction;
+import com.seeedstudio.node.data.DataCenter;
 
 public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorChangedListener{
 	private static final String TAG = "Node Color Pixels";

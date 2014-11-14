@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

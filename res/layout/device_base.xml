@@ -3,6 +3,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seeedstudio.ble.node.DeviceBaseActivity"
+    tools:context="com.seeedstudio.node.ble.DeviceBaseActivity"
     tools:ignore="MergeRootFrame" />
 

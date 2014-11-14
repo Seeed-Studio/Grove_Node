@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ble;
 
 import java.io.UnsupportedEncodingException;
 
@@ -19,6 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.ui.NodeActivity;
 
 public class DeviceBaseActivity extends Activity {
 	private static final String TAG = "Node Device Base";

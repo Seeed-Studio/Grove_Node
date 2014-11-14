@@ -1,9 +1,7 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -11,11 +9,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.Grove;
+import com.seeedstudio.node.data.SensorData;
+import com.seeedstudio.node.data.SensorEvent;
 
 public class SensorActivity extends DeviceBaseActivity {
 	static final String TAG = "Node Sensor";

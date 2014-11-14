@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 
 import java.util.ArrayList;
@@ -11,6 +11,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.data.ActuatorAction;
+import com.seeedstudio.node.data.SensorEvent;
 
 public class MapActivity extends DeviceBaseActivity {
 	private static final String TAG = "Node Mapping";

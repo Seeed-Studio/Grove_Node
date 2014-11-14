@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.SensorData;
+import com.seeedstudio.node.data.SensorEvent;
 
 
 

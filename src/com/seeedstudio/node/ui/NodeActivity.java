@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -24,6 +24,11 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.ble.DeviceListActivity;
+import com.seeedstudio.node.ble.UartService;
+import com.seeedstudio.node.data.DataCenter;
 
 public class NodeActivity extends Activity {
 	private static final String TAG = "Node";

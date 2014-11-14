@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.SensorData;
 
 public class SensorDataArrayAdapter extends ArrayAdapter<SensorData> {
 	  private final Context context;

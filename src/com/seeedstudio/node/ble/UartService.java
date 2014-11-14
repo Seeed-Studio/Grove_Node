@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ble;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -152,7 +152,7 @@ public class UartService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        UartService getService() {
+        public UartService getService() {
             return UartService.this;
         }
     }

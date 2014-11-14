@@ -1,4 +1,5 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.data;
+
 
 public class SensorEvent {
 	public String operator;

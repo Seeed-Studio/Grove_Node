@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.seeedstudio.node.R;
+import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.Grove;
 
 public class ActuatorListActivity extends DeviceBaseActivity {
 	private DataCenter mDataCenter;

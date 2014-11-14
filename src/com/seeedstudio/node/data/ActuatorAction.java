@@ -1,4 +1,4 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.data;
 
 public class ActuatorAction {
 	public String name;

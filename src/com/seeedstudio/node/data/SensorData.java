@@ -1,4 +1,6 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.data;
+
+import com.seeedstudio.node.R;
 
 public class SensorData {
 	static final public int UNKNOWN    = 0;

@@ -1,6 +1,8 @@
-package com.seeedstudio.ble.node;
+package com.seeedstudio.node.data;
 
 import java.util.ArrayList;
+
+import com.seeedstudio.node.R;
 
 public class DataCenter {
 	public ArrayList<SensorEvent>  sensorEventList;
