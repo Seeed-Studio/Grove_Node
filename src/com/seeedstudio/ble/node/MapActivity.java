@@ -19,27 +19,21 @@ public class MapActivity extends DeviceBaseActivity {
 	private Spinner mActionSpinner;
 	private ListView mListView;
 	
-	ArrayAdapter<String> mEventAdapter;
-	ArrayAdapter<String> mActionAdapter;
-	ArrayAdapter<String> mListAdapter;
-	DataCenter mDataCenter;
-	
+	private ArrayAdapter<String> mListAdapter;
+	private ArrayAdapter<SensorEvent> mEventAdapter;
+	private ArrayAdapter<ActuatorAction> mActionAdapter;
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 		
-		mDataCenter = DataCenter.getInstance();
 		
 		ArrayList<SensorEvent> eventList = mDataCenter.sensorEventList;
-		ArrayList<String> eventNameList = new ArrayList<String>();
-		for (SensorEvent event : eventList) {
-			eventNameList.add(event.toString());
-		}
-		mEventAdapter = new ArrayAdapter<String>(this, R.layout.device_row, eventNameList);
+		mEventAdapter = new ArrayAdapter<SensorEvent>(this, R.layout.device_row, eventList);
 		
-		ArrayList<String> actionList = mDataCenter.getActionNameList();
-		mActionAdapter = new ArrayAdapter<String>(this, R.layout.device_row, actionList);
+		ArrayList<ActuatorAction> actionList = mDataCenter.actuatorActionList;
+		mActionAdapter = new ArrayAdapter<ActuatorAction>(this, R.layout.device_row, actionList);
 		
 		mEventSpinner = (Spinner) findViewById(R.id.event_spinner);
 		mActionSpinner = (Spinner) findViewById(R.id.action_spinner);
@@ -47,7 +41,7 @@ public class MapActivity extends DeviceBaseActivity {
 		mEventSpinner.setAdapter(mEventAdapter);
 		mActionSpinner.setAdapter(mActionAdapter);
 		
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = mDataCenter.iftttList;
 		mListAdapter = new ArrayAdapter<String>(this, R.layout.device_row, list);
 		
 		mListView = (ListView) findViewById(R.id.ifttt_list_view);
@@ -98,9 +92,9 @@ public class MapActivity extends DeviceBaseActivity {
 		}
 		
 		int eventPosition = mEventSpinner.getSelectedItemPosition();
-		int actionIndex = mDataCenter.getActionIndex(actionName);
+		int actionPosition = mActionSpinner.getSelectedItemPosition();
 		
-		String command = "m " + eventPosition + " " + actionIndex;
+		String command = "m " + eventPosition + " " + actionPosition;
 		configureDevice(command.getBytes());
 		
 		Log.v(TAG, "Mapping: " + command);

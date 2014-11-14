@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class DataCenter {
 	public ArrayList<SensorEvent>  sensorEventList;
+	public ArrayList<ActuatorAction> actuatorActionList;
+	
+	public ArrayList<String> iftttList;
 	
 	private ArrayList<Grove> mSensorList;
 	private ArrayList<Grove> mActuatorList;
 
-	private ArrayList<String> mActionNameList;
-	private ArrayList<float[]> mActionDataList;
 	private int mSensorId;
 	private int mActuatorId;
 
@@ -48,9 +49,9 @@ public class DataCenter {
 				R.drawable.color_pixels_strip));
 		
 		sensorEventList = new ArrayList<SensorEvent>();
+		actuatorActionList = new ArrayList<ActuatorAction>();
+		iftttList = new ArrayList<String>();
 
-		mActionNameList = new ArrayList<String>();
-		mActionDataList = new ArrayList<float[]>();
 		mSensorId = -1;
 		mActuatorId = -1;
 	}
@@ -87,6 +88,9 @@ public class DataCenter {
 	public void setSensorId(int id) {
 		if (mSensorId != id) {
 			mSensorId = id;
+			
+			sensorEventList.clear();
+			iftttList.clear();
 		}
 	}
 
@@ -97,73 +101,10 @@ public class DataCenter {
 	public void setActuatorId(int id) {
 		if (mActuatorId != id) {
 			mActuatorId = id;
-			removeAllAction();
+			
+			actuatorActionList.clear();
+			iftttList.clear();
 		}
 	}
-
-
-
-	public boolean addAction(String name, float[] params) {
-		int index = mActionNameList.indexOf(name);
-		if (index < 0) {
-			mActionNameList.add(name);
-			mActionDataList.add(params);
-		} else {
-			mActionDataList.set(index, params);
-		}
-
-		return true;
-	}
-
-	public boolean changeAction(String name, float[] params) {
-		int index = mActionNameList.indexOf(name);
-		if (index < 0) {
-			return false;
-		}
-
-		mActionDataList.set(index, params);
-		return true;
-	}
-
-	public boolean removeAction(String name) {
-		int index = mActionNameList.indexOf(name);
-		if (index < 0) {
-			return false;
-		}
-
-		mActionNameList.remove(index);
-		mActionDataList.remove(index);
-		return true;
-	}
-
-	public boolean removeAllAction() {
-		mActionNameList.clear();
-		mActionDataList.clear();
-		return true;
-	}
-
-	public float[] getAction(String name) {
-		int index = mActionNameList.indexOf(name);
-		if (index < 0) {
-			return null;
-		}
-
-		return mActionDataList.get(index);
-	}
-
-	public int getActionNumber() {
-		return mActionNameList.size();
-	}
-
-	public int getActionIndex(String name) {
-		return mActionNameList.indexOf(name);
-	}
-
-	public ArrayList<String> getActionNameList() {
-		return mActionNameList;
-	}
-
-	public ArrayList<float[]> getActionDataList() {
-		return mActionDataList;
-	}
+	
 }

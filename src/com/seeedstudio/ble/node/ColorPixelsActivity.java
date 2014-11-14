@@ -19,8 +19,9 @@ import com.larswerkman.holocolorpicker.SVBar;
 public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorChangedListener{
 	private static final String TAG = "Node Color Pixels";
 	
-	private ListView actionListView;
-	private ArrayAdapter<String> listAdapter;
+	private ListView mActionListView;
+	private ArrayAdapter<ActuatorAction> mListAdapter;
+	private ArrayList<ActuatorAction> mActionList;
 	
 	private ColorPicker mColorPicker;
 
@@ -35,27 +36,26 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 		mColorPicker.addSVBar(svbar);
 		mColorPicker.setOnColorChangedListener(this);
 		
-		float[] onParam = new float[1];
-		onParam[0] = 0;
-		mDataCenter.addAction("On", onParam);
+		mActionList = mDataCenter.actuatorActionList;
 		
-		float[] offParam = new float[1];
-		offParam[0] = 1;
-		mDataCenter.addAction("Off", offParam);
+		if (mActionList.isEmpty()) {
+			float[] offData = {0, 0, 0};
+			mActionList.add(new ActuatorAction("OFF", offData));
+		}
 		
-		ArrayList<String> actionList = (ArrayList<String>) mDataCenter.getActionNameList().clone();
-		listAdapter = new ArrayAdapter<String>(this, R.layout.device_row, actionList);
+		mListAdapter = new ArrayAdapter<ActuatorAction>(this, R.layout.device_row, mActionList);
 
 		// Find the ListView resource. 
-		actionListView = (ListView) findViewById( R.id.action_list_view );
-	    actionListView.setAdapter(listAdapter);
-	    actionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		mActionListView = (ListView) findViewById( R.id.action_list_view );
+	    mActionListView.setAdapter(mListAdapter);
+	    mActionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int postion,
+			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				String item = ((TextView)view).getText().toString();
-				float[] params = mDataCenter.getAction(item);
+				ActuatorAction action = mListAdapter.getItem(position);
+				
+				float[] params = action.data;
 				if (params != null) {
 					String command = "o";
 					for (int i = 0; i < params.length; i++) {
@@ -82,14 +82,11 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 	
 	@Override
 	protected void onServiceStateChanged(int state) {
-//		super.onServiceStateChanged(state);
-		
 		if (state == 2) {
-			ArrayList<float[]> actionList = mDataCenter.getActionDataList();
-			int actionNumber = actionList.size();
+			int actionNumber = mActionList.size();
 			for (int i = 0; i < actionNumber; i++) {
 				String command = "f " + i;
-				float[] data = actionList.get(i);
+				float[] data = mActionList.get(i).data;
 				for (int j = 0; j < data.length; j++) {
 					command += " " + DataCenter.floatToString(data[j]);
 				}

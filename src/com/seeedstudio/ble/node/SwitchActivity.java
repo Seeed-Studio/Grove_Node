@@ -15,80 +15,83 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class SwitchActivity extends DeviceBaseActivity {
-	private static final String TAG = "Node Switch";
-	
-	private ListView actionListView;
-	private ArrayAdapter<String> listAdapter;
+	private static final String TAG = "Node Relay";
+
+	private ListView mActionListView;
+	private ArrayAdapter<ActuatorAction> mListAdapter;
+	private ArrayList<ActuatorAction> mActionList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.switch_layout);
-		
-		float[] onParam = new float[1];
-		onParam[0] = 1;
-		mDataCenter.addAction("On", onParam);
-		
-		float[] offParam = new float[1];
-		offParam[0] = 0;
-		mDataCenter.addAction("Off", offParam);
-		
-		ArrayList<String> actionList = (ArrayList<String>) mDataCenter.getActionNameList().clone();
-		listAdapter = new ArrayAdapter<String>(this, R.layout.device_row, actionList);
 
-		// Find the ListView resource. 
-		actionListView = (ListView) findViewById( R.id.action_list_view );
-	    actionListView.setAdapter(listAdapter);
-	    actionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		mActionList = mDataCenter.actuatorActionList;
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int postion,
-					long id) {
-				String item = ((TextView)view).getText().toString();
-				float[] params = mDataCenter.getAction(item);
-				if (params != null) {
-					String command = "o";
-					for (int i = 0; i < params.length; i++) {
-						command += " " + DataCenter.floatToString(params[i]);
+		if (mActionList.isEmpty()) {
+			float[] onData = { 0 };
+			mActionList.add(new ActuatorAction("ON", onData));
+
+			float[] offData = { 1 };
+			mActionList.add(new ActuatorAction("OFF", offData));
+		}
+
+		mListAdapter = new ArrayAdapter<ActuatorAction>(this,
+				R.layout.device_row, mActionList);
+
+		// Find the ListView resource.
+		mActionListView = (ListView) findViewById(R.id.action_list_view);
+		mActionListView.setAdapter(mListAdapter);
+		mActionListView
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						ActuatorAction action = mListAdapter.getItem(position);
+
+						float[] params = action.data;
+						if (params != null) {
+							String command = "o";
+							for (int i = 0; i < params.length; i++) {
+								command += " "
+										+ DataCenter.floatToString(params[i]);
+							}
+							configureDevice(command.getBytes());
+
+							Log.v(TAG, "Sending: " + command);
+						}
 					}
-					configureDevice(command.getBytes());
-					
-					Log.v(TAG, "Sending: " + command);
-				}
-			}
-	    	
-	    });
+
+				});
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
-	        NavUtils.navigateUpFromSameTask(this);
-	        return true;
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	protected void onServiceStateChanged(int state) {
-//		super.onServiceStateChanged(state);
-		
 		if (state == 2) {
-			ArrayList<float[]> actionList = mDataCenter.getActionDataList();
-			int actionNumber = actionList.size();
+			int actionNumber = mActionList.size();
 			for (int i = 0; i < actionNumber; i++) {
 				String command = "f " + i;
-				float[] data = actionList.get(i);
+				float[] data = mActionList.get(i).data;
 				for (int j = 0; j < data.length; j++) {
 					command += " " + DataCenter.floatToString(data[j]);
 				}
-				
+
 				configureDevice(command.getBytes());
-				
+
 				Log.v(TAG, "Sending: " + command);
-				
+
 			}
 		}
 	}
