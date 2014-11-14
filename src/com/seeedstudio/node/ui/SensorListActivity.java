@@ -17,7 +17,6 @@ import com.seeedstudio.node.data.Grove;
 public class SensorListActivity extends DeviceBaseActivity {
 	
 	private DataCenter mDataCenter;
-	private Grove[]    mSensors;
 	private ListView   mSensorListView;
 	private GroveArrayAdapter mListAdapter;
 
@@ -41,9 +40,6 @@ public class SensorListActivity extends DeviceBaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				int sensor = position;
-				if (sensor >= mSensors.length) {
-					return;
-				}
 
 				String command = "s " + position;
 				configureDevice(command.getBytes());

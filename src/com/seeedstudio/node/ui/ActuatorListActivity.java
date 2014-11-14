@@ -16,7 +16,6 @@ import com.seeedstudio.node.data.Grove;
 
 public class ActuatorListActivity extends DeviceBaseActivity {
 	private DataCenter mDataCenter;
-	private Grove[] mActuators;
 	private ListView mListView;
 	private GroveArrayAdapter mListAdapter;
 

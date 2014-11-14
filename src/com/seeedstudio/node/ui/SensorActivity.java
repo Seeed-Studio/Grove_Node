@@ -87,11 +87,15 @@ public class SensorActivity extends DeviceBaseActivity {
 					public void onDismiss(ListView listView,
 							int[] reverseSortedPositions) {
 						for (int position : reverseSortedPositions) {
+							if (position == 0) {
+								// Swipe the header to all items
+								mEventListAdapter.clear();
+								return;
+							}
 							SensorEvent item = mEventListAdapter
 									.getItem(position - 1);
 							mEventListAdapter.remove(item);
 						}
-						mEventListAdapter.notifyDataSetChanged();
 					}
 				});
 		mEventListView.setOnTouchListener(touchListener);
