@@ -27,14 +27,14 @@ public class SensorActivity extends DeviceBaseActivity {
 	private SensorDataArrayAdapter mDataListAdapter;
 
 	private ListView mEventListView;
-	private ArrayAdapter<String> mEventListAdapter;
-	private ArrayList<String> mEventNameList;
+	private SensorEventArrayAdapter mEventListAdapter;
+	private SensorEvent[] mSensorEvents;
 
 	private ImageView mTypeImageView;
 	private TextView mOperatorTextView;
 	private EditText mValueEditText;
-	
-	private int mTypeImage;
+
+	private int mCurrentDataIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +54,8 @@ public class SensorActivity extends DeviceBaseActivity {
 		mDataListView = (ListView) findViewById(R.id.data_list_view);
 		mDataListView.setAdapter(mDataListAdapter);
 
-		mEventNameList = (ArrayList<String>) mDataCenter.getEventNameList()
-				.clone();
-		mEventListAdapter = new ArrayAdapter<String>(this, R.layout.device_row,
-				mEventNameList);
+		mEventListAdapter = new SensorEventArrayAdapter(this,
+				mDataCenter.sensorEventList);
 		mEventListView = (ListView) findViewById(R.id.event_list_view);
 		mEventListView.setAdapter(mEventListAdapter);
 
@@ -85,10 +83,9 @@ public class SensorActivity extends DeviceBaseActivity {
 					public void onDismiss(ListView listView,
 							int[] reverseSortedPositions) {
 						for (int position : reverseSortedPositions) {
-							String item = mEventListAdapter
+							SensorEvent item = mEventListAdapter
 									.getItem(position - 1);
 							mEventListAdapter.remove(item);
-							mDataCenter.removeEvent(item);
 						}
 						mEventListAdapter.notifyDataSetChanged();
 					}
@@ -102,18 +99,18 @@ public class SensorActivity extends DeviceBaseActivity {
 		mTypeImageView = (ImageView) findViewById(R.id.type_image_view);
 		mOperatorTextView = (TextView) findViewById(R.id.operator_text_view);
 		mValueEditText = (EditText) findViewById(R.id.value_edit_text);
-		
-		mTypeImage = 0;
-		mTypeImageView.setImageResource(mSensorData[mTypeImage].image);
+
+		mCurrentDataIndex = 0;
+		mTypeImageView.setImageResource(mSensorData[mCurrentDataIndex].image);
 	}
 
 	public void changeType(View v) {
-		mTypeImage++;
-		if (mTypeImage >= mSensorData.length) {
-			mTypeImage = 0;
+		mCurrentDataIndex++;
+		if (mCurrentDataIndex >= mSensorData.length) {
+			mCurrentDataIndex = 0;
 		}
-		
-		mTypeImageView.setImageResource(mSensorData[mTypeImage].image);
+
+		mTypeImageView.setImageResource(mSensorData[mCurrentDataIndex].image);
 	}
 
 	public void changeOperator(View v) {
@@ -131,24 +128,23 @@ public class SensorActivity extends DeviceBaseActivity {
 
 	public void addEvent(View v) {
 		String operator = mOperatorTextView.getText().toString();
-		String value = mValueEditText.getText().toString();
-		String equation = mSensorData[mTypeImage].name + " " + operator + " " + value;
-		SensorEvent event = new SensorEvent();
-		event.type = 0;
-		event.operator = operator.charAt(0);
+		String valueString = mValueEditText.getText().toString();
+		float value;
 		try {
-			event.value = Float.parseFloat(value);
+			value = Float.parseFloat(valueString);
 		} catch (NumberFormatException e) {
 			Log.d(TAG, "Invalid Input");
 			return;
 		}
 
-		int n = mDataCenter.getEventNumber();
-		mDataCenter.addEvent(equation, event);
+		SensorData data = new SensorData(mSensorData[mCurrentDataIndex].type, value);
+		SensorEvent event = new SensorEvent(operator, data);
 
-		mEventListAdapter.insert(equation, 0);
+		mEventListAdapter.add(event);
+		
+		mValueEditText.setText("");
 	}
-	
+
 	@Override
 	protected void onDeviceDataReceived(byte[] data) {
 		String rxString = null;
@@ -159,14 +155,15 @@ public class SensorActivity extends DeviceBaseActivity {
 			Log.e(TAG, e.toString());
 			return;
 		}
-		
+
 		String[] slices = rxString.split(" ");
 		if (slices[0].equals("i") && (slices.length == 3)) {
 			int dimention = Integer.parseInt(slices[1]);
 			float value = Float.parseFloat(slices[2]);
 			float ten = 10;
 			value = ((int) (value * 10)) / ten;
-			if (dimention < mSensorData.length && mSensorData[dimention].data != value) {
+			if (dimention < mSensorData.length
+					&& mSensorData[dimention].data != value) {
 				mSensorData[dimention].data = value;
 				mDataListAdapter.notifyDataSetChanged();
 			}

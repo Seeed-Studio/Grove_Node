@@ -3,10 +3,11 @@ package com.seeedstudio.ble.node;
 import java.util.ArrayList;
 
 public class DataCenter {
+	public ArrayList<SensorEvent>  sensorEventList;
+	
 	private ArrayList<Grove> mSensorList;
 	private ArrayList<Grove> mActuatorList;
-	private ArrayList<String> mEventNameList;
-	private ArrayList<SensorEvent> mEventDataList;
+
 	private ArrayList<String> mActionNameList;
 	private ArrayList<float[]> mActionDataList;
 	private int mSensorId;
@@ -45,9 +46,9 @@ public class DataCenter {
 		mActuatorList.add(new Grove("LED", 1, 1, R.drawable.grove_led));
 		mActuatorList.add(new Grove("Color Pixels", 1, 1,
 				R.drawable.color_pixels_strip));
+		
+		sensorEventList = new ArrayList<SensorEvent>();
 
-		mEventNameList = new ArrayList<String>();
-		mEventDataList = new ArrayList<SensorEvent>();
 		mActionNameList = new ArrayList<String>();
 		mActionDataList = new ArrayList<float[]>();
 		mSensorId = -1;
@@ -60,6 +61,13 @@ public class DataCenter {
 
 	public static DataCenter getInstance() {
 		return LazyHolder.INSTANCE;
+	}
+	
+	public static String floatToString(float d) {
+		if(d == (long) d)
+	        return String.format("%d",(long)d);
+	    else
+	        return String.format("%s",d);
 	}
 
 	public Grove[] getSensors() {
@@ -79,7 +87,6 @@ public class DataCenter {
 	public void setSensorId(int id) {
 		if (mSensorId != id) {
 			mSensorId = id;
-			removeAllEvent();
 		}
 	}
 
@@ -94,65 +101,7 @@ public class DataCenter {
 		}
 	}
 
-	public boolean addEvent(String name, SensorEvent event) {
-		int index = mEventNameList.indexOf(name);
-		if (index < 0) {
-			mEventNameList.add(name);
-			mEventDataList.add(event);
-		} else {
-			mEventDataList.set(index, event);
-		}
 
-		return true;
-	}
-
-	public boolean changeEvent(String name, SensorEvent event) {
-		int index = mEventNameList.indexOf(name);
-		if (index < 0) {
-			return false;
-		}
-
-		mEventDataList.set(index, event);
-		return true;
-	}
-
-	public boolean removeEvent(String name) {
-		int index = mEventNameList.indexOf(name);
-		if (index < 0) {
-			return false;
-		}
-
-		mEventNameList.remove(index);
-		mEventDataList.remove(index);
-		return true;
-	}
-
-	public boolean removeAllEvent() {
-		mEventNameList.clear();
-		mEventDataList.clear();
-		return true;
-	}
-
-	public SensorEvent getEvent(String name) {
-		int index = mEventNameList.indexOf(name);
-		if (index < 0) {
-			return null;
-		}
-
-		return (SensorEvent) mEventDataList.get(index);
-	}
-
-	public int getEventNumber() {
-		return mEventNameList.size();
-	}
-
-	public int getEventIndex(String name) {
-		return mEventNameList.indexOf(name);
-	}
-
-	public ArrayList<String> getEventNameList() {
-		return mEventNameList;
-	}
 
 	public boolean addAction(String name, float[] params) {
 		int index = mActionNameList.indexOf(name);

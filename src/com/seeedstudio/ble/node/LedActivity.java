@@ -56,7 +56,7 @@ public class LedActivity extends DeviceBaseActivity {
 				if (params != null) {
 					String command = "o";
 					for (int i = 0; i < params.length; i++) {
-						command += " " + Float.toString(params[i]);
+						command += " " + DataCenter.floatToString(params[i]);
 					}
 					configureDevice(command.getBytes());
 					
@@ -88,7 +88,7 @@ public class LedActivity extends DeviceBaseActivity {
 				String command = "f " + i;
 				float[] data = actionList.get(i);
 				for (int j = 0; j < data.length; j++) {
-					command += " " + Float.toString(data[j]);
+					command += " " + DataCenter.floatToString(data[j]);
 				}
 				
 				configureDevice(command.getBytes());

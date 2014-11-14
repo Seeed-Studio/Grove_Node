@@ -36,19 +36,19 @@ public class DeviceBaseActivity extends Activity {
 	// private BluetoothDevice mDevice = null;
 	// private BluetoothAdapter mBtAdapter = null;
 	private boolean mConnected = false;
-	
+
 	protected DataCenter mDataCenter;
-	
+
 	private int mServiceState;
-	
+
 	private int mReconnectTry;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		mDataCenter = DataCenter.getInstance();
-		
+
 		mServiceState = -1;
 		mReconnectTry = 0;
 
@@ -60,13 +60,13 @@ public class DeviceBaseActivity extends Activity {
 		public void onServiceConnected(ComponentName className,
 				IBinder rawBinder) {
 			mService = ((UartService.LocalBinder) rawBinder).getService();
-			
+
 			Log.d(TAG, "onServiceConnected mService= " + mService);
 			if (!mService.initialize()) {
 				Log.e(TAG, "Unable to initialize Bluetooth");
 				finish();
 			}
-			
+
 			int state = mService.getConnectionState();
 			if (state != mServiceState) {
 				mServiceState = state;
@@ -101,7 +101,7 @@ public class DeviceBaseActivity extends Activity {
 				Log.d(TAG, "Connected to device");
 				mConnected = true;
 				mReconnectTry = 0;
-				
+
 				int state = mService.getConnectionState();
 				if (state != mServiceState) {
 					mServiceState = state;
@@ -119,34 +119,24 @@ public class DeviceBaseActivity extends Activity {
 			// *********************//
 			if (action.equals(UartService.ACTION_GATT_DISCONNECTED)) {
 				Log.d(TAG, "Disconnected");
+				showMessage("Device is disconnected");
+
 				mConnected = false;
 				int state = mService.getConnectionState();
 				if (state != mServiceState) {
 					mServiceState = state;
 					onServiceStateChanged(state);
 				}
-				
-//				if (mReconnectTry <= 3) {
-//					mReconnectTry++;
-//					try {
-//						Thread.sleep(300);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					mService.connect();
-//				} else 
-				{
-					runOnUiThread(new Runnable() {
-						public void run() {
-							Log.d(TAG, "UART_DISCONNECT_MSG");
-							mState = UART_PROFILE_DISCONNECTED;
-							mService.close();
-							// setUiState();
-	
-						}
-					});
-				}
+
+				runOnUiThread(new Runnable() {
+					public void run() {
+						Log.d(TAG, "UART_DISCONNECT_MSG");
+						mState = UART_PROFILE_DISCONNECTED;
+						mService.close();
+						// setUiState();
+
+					}
+				});
 			}
 
 			// *********************//
@@ -160,7 +150,7 @@ public class DeviceBaseActivity extends Activity {
 						.getByteArrayExtra(UartService.EXTRA_DATA);
 				runOnUiThread(new Runnable() {
 					public void run() {
-						 onDeviceDataReceived(rxValue);
+						onDeviceDataReceived(rxValue);
 					}
 				});
 			}
@@ -232,16 +222,16 @@ public class DeviceBaseActivity extends Activity {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 
 	}
-	
+
 	protected boolean configureDevice(byte[] packet) {
 		if (mService == null || mService.getConnectionState() != 2) {
 			return false;
 		}
-		
+
 		mService.writeRXCharacteristic(packet);
 		return true;
 	}
-	
+
 	protected void onDeviceDataReceived(byte[] data) {
 		try {
 			String rxString = new String(data, "UTF-8");
@@ -250,9 +240,9 @@ public class DeviceBaseActivity extends Activity {
 			Log.e(TAG, e.toString());
 		}
 	}
-	
+
 	protected void onServiceStateChanged(int state) {
-		
+
 	}
 
 }

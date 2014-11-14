@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
-        android:id="@+id/data_type_image_view"
+        android:id="@+id/type_image_view"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_centerVertical="true"
@@ -21,7 +21,7 @@
         android:src="@drawable/temperature" />
 
     <TextView
-        android:id="@+id/data_unit_text_view"
+        android:id="@+id/unit_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

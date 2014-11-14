@@ -30,8 +30,13 @@ public class MapActivity extends DeviceBaseActivity {
 		setContentView(R.layout.map);
 		
 		mDataCenter = DataCenter.getInstance();
-		ArrayList<String> eventList = mDataCenter.getEventNameList();
-		mEventAdapter = new ArrayAdapter<String>(this, R.layout.device_row, eventList);
+		
+		ArrayList<SensorEvent> eventList = mDataCenter.sensorEventList;
+		ArrayList<String> eventNameList = new ArrayList<String>();
+		for (SensorEvent event : eventList) {
+			eventNameList.add(event.toString());
+		}
+		mEventAdapter = new ArrayAdapter<String>(this, R.layout.device_row, eventNameList);
 		
 		ArrayList<String> actionList = mDataCenter.getActionNameList();
 		mActionAdapter = new ArrayAdapter<String>(this, R.layout.device_row, actionList);
@@ -92,10 +97,10 @@ public class MapActivity extends DeviceBaseActivity {
 			mListAdapter.add(ifttt);
 		}
 		
-		int eventIndex = mDataCenter.getEventIndex(eventName);
+		int eventPosition = mEventSpinner.getSelectedItemPosition();
 		int actionIndex = mDataCenter.getActionIndex(actionName);
 		
-		String command = "m " + eventIndex + " " + actionIndex;
+		String command = "m " + eventPosition + " " + actionIndex;
 		configureDevice(command.getBytes());
 		
 		Log.v(TAG, "Mapping: " + command);

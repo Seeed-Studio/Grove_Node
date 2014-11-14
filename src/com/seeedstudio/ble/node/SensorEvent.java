@@ -1,12 +1,16 @@
 package com.seeedstudio.ble.node;
 
 public class SensorEvent {
-	public int    type;
-	public char   operator;
-	public float  value;
+	public String operator;
+	public SensorData data;
+	
+	public SensorEvent(String operator, SensorData data) {
+		this.operator = operator;
+		this.data = data;
+	}
 	
 	@Override
 	public String toString() {
-		return type + " " + operator + " " + Float.toString(value);
+		return data.name + operator + DataCenter.floatToString(data.data);
 	}
 }

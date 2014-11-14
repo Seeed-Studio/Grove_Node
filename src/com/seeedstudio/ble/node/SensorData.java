@@ -27,13 +27,13 @@ public class SensorData {
 		this.type = type;
 		this.data = data;
 		
-		if (type < units.length && type >= 0) {
-			unit = units[type];
-			image = images[type];
-		} else {
-			unit = units[UNKNOWN];
-			image = images[UNKNOWN];;
+		if (type >= units.length && type < 0) {
+			type = UNKNOWN;
 		}
+		
+		name = names[type];
+		unit = units[type];
+		image = images[type];
 	}
 	
 	public String toString() {
