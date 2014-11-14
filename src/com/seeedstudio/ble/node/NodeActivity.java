@@ -251,9 +251,9 @@ public class NodeActivity extends Activity {
 								int dimention = Integer.parseInt(slices[1]);
 								double value = Float.parseFloat(slices[2]);
 								value = ((int) (value * 10)) / 10.0;
-								if (mDataCenter.getSensorId() != -1) {
-									mSensorHintTextView.setText(String.valueOf(value));
-								}
+//								if (mDataCenter.getSensorId() != -1) {
+//									mSensorHintTextView.setText(String.valueOf(value));
+//								}
 							}
 						} catch (Exception e) {
 							Log.e(TAG, e.toString());
@@ -309,16 +309,17 @@ public class NodeActivity extends Activity {
 		mDataCenter = DataCenter.getInstance();
 		if (mDataCenter.getSensorId() == -1) {
 			mSensorHintLayout.setVisibility(View.VISIBLE);
+			mActuatorHintLayout.setVisibility(View.INVISIBLE);
 		} else {
+			mSensorHintLayout.setVisibility(View.INVISIBLE);
 			if (mDataCenter.getActuatorId() == -1) {
 				mActuatorHintLayout.setVisibility(View.VISIBLE);
-				mSensorHintLayout.setVisibility(View.INVISIBLE);
 			} else {
 				mActuatorHintLayout.setVisibility(View.INVISIBLE);
-				mSensorHintLayout.setVisibility(View.VISIBLE);
-				if (mSensorHintTextView.getText().toString().equals("Select a")) {
-					mSensorHintTextView.setText("N/A");
-				}
+//				mSensorHintLayout.setVisibility(View.VISIBLE);
+//				if (mSensorHintTextView.getText().toString().equals("Select a")) {
+//					mSensorHintTextView.setText("N/A");
+//				}
 			}
 		}
 	}

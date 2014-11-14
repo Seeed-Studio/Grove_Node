@@ -20,7 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/data_list_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" >
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp" >
     </ListView>
 
     <Button
@@ -30,5 +32,42 @@
         android:layout_alignParentBottom="true"
         android:onClick="addEvent"
         android:text="Add a event" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/add_event_button"
+        android:padding="8dp" >
+
+        <ImageView
+            android:id="@+id/type_image_view"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:onClick="changeType"
+            android:src="@drawable/percentage"/>
+
+        <TextView
+            android:id="@+id/operator_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="24dp"
+            android:clickable="true"
+            android:text=">"
+            android:onClick="changeOperator"
+            android:textSize="32sp" />
+
+        <EditText
+            android:id="@+id/value_edit_text"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Value"
+            android:inputType="numberDecimal|numberSigned"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </EditText>
+    </LinearLayout>
 
 </RelativeLayout>

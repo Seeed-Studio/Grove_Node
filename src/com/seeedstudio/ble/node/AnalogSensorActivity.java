@@ -75,16 +75,16 @@ public class AnalogSensorActivity extends DeviceBaseActivity {
 		conditionTextView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String condition = conditionTextView.getText().toString();
-				if (condition.equals(">")) {
-					condition = "<";
-				} else if (condition.equals("<")) {
-					condition = "=";
+				String operator = conditionTextView.getText().toString();
+				if (operator.equals(">")) {
+					operator = "<";
+				} else if (operator.equals("<")) {
+					operator = "=";
 				} else {
-					condition = ">";
+					operator = ">";
 				}
 
-				conditionTextView.setText(condition);
+				conditionTextView.setText(operator);
 			}
 		});
 
@@ -97,14 +97,14 @@ public class AnalogSensorActivity extends DeviceBaseActivity {
 				.setPositiveButton("Add",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								String condition = conditionTextView.getText()
+								String operator = conditionTextView.getText()
 										.toString();
 								String value = valueTextView.getText()
 										.toString();
-								String equation = "x" + condition + value;
+								String equation = "x" + operator + value;
 								SensorEvent event = new SensorEvent();
 								event.type = 0;
-								event.condition = condition.charAt(0);
+								event.operator = operator.charAt(0);
 								try {
 									event.value = Float.parseFloat(value);
 								} catch (NumberFormatException e) {

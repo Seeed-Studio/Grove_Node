@@ -47,9 +47,44 @@ public class MapActivity extends DeviceBaseActivity {
 		
 		mListView = (ListView) findViewById(R.id.ifttt_list_view);
 		mListView.setAdapter(mListAdapter);
+		
+		// Create a ListView-specific touch listener. ListViews are given special treatment because
+        // by default they handle touches for their list items... i.e. they're in charge of drawing
+        // the pressed state (the list selector), handling list item clicks, etc.
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                		mListView,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                	mListAdapter.remove(mListAdapter.getItem(position));
+                                }
+                                mListAdapter.notifyDataSetChanged();
+                            }
+                        });
+        mListView.setOnTouchListener(touchListener);
+        // Setting this scroll listener is required to ensure that during ListView scrolling,
+        // we don't look for swipes.
+        mListView.setOnScrollListener(touchListener.makeScrollListener());
 	}
 	
 	public void onAddButtonClick(View v) {
+		if (mEventAdapter.isEmpty()) {
+			showMessage("Please selet a sensor and add some events first");
+			return;
+		}
+		
+		if (mActionAdapter.isEmpty()) {
+			showMessage("Please selet a actuator and add some actions first");
+			return;
+		}
+		
 		String eventName = mEventSpinner.getSelectedItem().toString();
 		String actionName = mActionSpinner.getSelectedItem().toString();
 		String ifttt = "if " + eventName + " then " + actionName;

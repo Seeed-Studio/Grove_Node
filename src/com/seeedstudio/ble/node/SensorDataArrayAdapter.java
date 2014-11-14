@@ -29,11 +29,12 @@ public class SensorDataArrayAdapter extends ArrayAdapter<SensorData> {
 	    ImageView imageView = (ImageView) rowView.findViewById(R.id.data_type_image_view);
 	    
 	    float data = values[position].data;
-	    if (data != Float.NaN) {
-	    	dataView.setText(Float.toString(data));
-	    } else {
+	    if (Float.isNaN(data)) {
 	    	dataView.setText("N/A");
+	    } else {
+	    	dataView.setText(Float.toString(data));
 	    }
+	    
 	    unitView.setText(values[position].unit);
 	    imageView.setImageResource(values[position].image);
 
