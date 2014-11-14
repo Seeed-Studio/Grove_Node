@@ -1,5 +1,6 @@
 package com.seeedstudio.ble.node;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -16,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SensorActivity extends Activity {
+public class SensorActivity extends DeviceBaseActivity {
 	static final String TAG = "Node Sensor";
 
 	private SensorData[] mSensorData;
@@ -32,12 +33,13 @@ public class SensorActivity extends Activity {
 	private ImageView mTypeImageView;
 	private TextView mOperatorTextView;
 	private EditText mValueEditText;
+	
+	private int mTypeImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Bundle extras = getIntent().getExtras();
 		int id = getIntent().getExtras().getInt("sensor");
 
 		mDataCenter = DataCenter.getInstance();
@@ -47,7 +49,7 @@ public class SensorActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.sensor);
 
-		mSensorData = sensor.data;
+		mSensorData = (SensorData[]) sensor.data;
 		mDataListAdapter = new SensorDataArrayAdapter(this, mSensorData);
 		mDataListView = (ListView) findViewById(R.id.data_list_view);
 		mDataListView.setAdapter(mDataListAdapter);
@@ -100,10 +102,18 @@ public class SensorActivity extends Activity {
 		mTypeImageView = (ImageView) findViewById(R.id.type_image_view);
 		mOperatorTextView = (TextView) findViewById(R.id.operator_text_view);
 		mValueEditText = (EditText) findViewById(R.id.value_edit_text);
+		
+		mTypeImage = 0;
+		mTypeImageView.setImageResource(mSensorData[mTypeImage].image);
 	}
 
 	public void changeType(View v) {
-
+		mTypeImage++;
+		if (mTypeImage >= mSensorData.length) {
+			mTypeImage = 0;
+		}
+		
+		mTypeImageView.setImageResource(mSensorData[mTypeImage].image);
 	}
 
 	public void changeOperator(View v) {
@@ -122,7 +132,7 @@ public class SensorActivity extends Activity {
 	public void addEvent(View v) {
 		String operator = mOperatorTextView.getText().toString();
 		String value = mValueEditText.getText().toString();
-		String equation = "i " + operator + " " + value;
+		String equation = mSensorData[mTypeImage].name + " " + operator + " " + value;
 		SensorEvent event = new SensorEvent();
 		event.type = 0;
 		event.operator = operator.charAt(0);
@@ -137,6 +147,31 @@ public class SensorActivity extends Activity {
 		mDataCenter.addEvent(equation, event);
 
 		mEventListAdapter.insert(equation, 0);
+	}
+	
+	@Override
+	protected void onDeviceDataReceived(byte[] data) {
+		String rxString = null;
+		try {
+			rxString = new String(data, "UTF-8");
+			Log.d(TAG, "RX: " + rxString);
+		} catch (UnsupportedEncodingException e) {
+			Log.e(TAG, e.toString());
+			return;
+		}
+		
+		String[] slices = rxString.split(" ");
+		if (slices[0].equals("i") && (slices.length == 3)) {
+			int dimention = Integer.parseInt(slices[1]);
+			float value = Float.parseFloat(slices[2]);
+			float ten = 10;
+			value = ((int) (value * 10)) / ten;
+			if (dimention < mSensorData.length && mSensorData[dimention].data != value) {
+				mSensorData[dimention].data = value;
+				mDataListAdapter.notifyDataSetChanged();
+			}
+		}
+
 	}
 
 	@Override

@@ -1,15 +1,22 @@
 package com.seeedstudio.ble.node;
 
 public class SensorData {
-	static String[] units = {"%", "°„C"};
-	static int[]    ids = {R.drawable.percentage, R.drawable.temperature};
+	static final public int UNKNOWN    = 0;
+	static final public int PERCENTAGE = 1;
+	static final public int CELSIUS    = 2;
+	static final public int HUMIDITY   = 3;
 	public int   type;
 	public float data;
+	public String name;
 	public String unit;
 	public int    image;
 	
+	static final String[] names = {"x", "%", "t", "h"};
+	static final String[] units = {"", "%", "°„C", "%"};
+	static final int[]    images = {R.drawable.percentage, R.drawable.percentage, R.drawable.temperature, R.drawable.humidity};
+	
 	public SensorData() {
-		this(0, Float.NaN);
+		this(UNKNOWN, Float.NaN);
 	}
 	
 	public SensorData(int type) {
@@ -22,30 +29,10 @@ public class SensorData {
 		
 		if (type < units.length && type >= 0) {
 			unit = units[type];
+			image = images[type];
 		} else {
-			unit = "";
-		}
-		
-		if (type < units.length && type >= 0) {
-			image = ids[type];
-		} else {
-			image = R.drawable.percentage;
-		}
-	}
-	
-	public String getUnit() {
-		if (type < units.length && type >= 0) {
-			return units[type];
-		} else {
-			return "";
-		}
-	}
-	
-	public int getImageId() {
-		if (type < units.length && type >= 0) {
-			return ids[type];
-		} else {
-			return R.drawable.percentage;
+			unit = units[UNKNOWN];
+			image = images[UNKNOWN];;
 		}
 	}
 	
