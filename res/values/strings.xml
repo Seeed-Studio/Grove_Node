@@ -57,7 +57,7 @@
     <string name="title_activity_temperature_sensor">Temperature Sensor</string>
     <string name="title_activity_led">LED</string>
     <string name="title_activity_analog_sensor">General analog sensor</string>
-    <string name="node">Node</string>
+    <string name="node">NODE</string>
     <string name="sensor">Sensor</string>
     <string name="actuator">Actuator</string>
     <string name="title_activity_map">Mapping</string>
@@ -65,5 +65,7 @@
     <string name="title_activity_relay">Relay</string>
     <string name="title_activity_color_pixels">Color Pixels</string>
     <string name="title_activity_sensor">Sensor</string>
+    <string name="title_activity_grove_list">Select a Grove</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

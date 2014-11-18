@@ -18,17 +18,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.seeedstudio.node.R;
 import com.seeedstudio.node.ble.DeviceListActivity;
 import com.seeedstudio.node.ble.UartService;
 import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.Grove;
+import com.seeedstudio.node.data.Task;
 
 public class NodeActivity extends Activity {
 	private static final String TAG = "Node";
@@ -47,31 +48,16 @@ public class NodeActivity extends Activity {
 	private BluetoothAdapter mBtAdapter = null;
 	private boolean mConnected = false;
 
-	private Button mConnectButton;
-
-	private ImageView mSensorImageView;
-	private ImageView mNodeImageView;
-	private ImageView mActuatorImageView;
-	
-	private FrameLayout mSensorHintLayout;
-	private FrameLayout mNodeHintLayout;
-	private FrameLayout mActuatorHintLayout;
-	
-	private TextView    mSensorTextView;
-	private TextView    mSensorHintTextView;
-	
 	private DataCenter mDataCenter;
+
+	private TaskArrayAdapter mListAdapter;
+	private ListView mListView;
+
+	private MenuItem mConnectMenuItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.node);
-		
-		mSensorHintLayout = (FrameLayout) findViewById(R.id.sensor_hint_layout);
-		mActuatorHintLayout = (FrameLayout) findViewById(R.id.actuator_hint_layout);
-		mSensorTextView = (TextView)findViewById(R.id.sensor_text_view); 
-		mSensorHintTextView = (TextView)findViewById(R.id.sensor_hint_text_view); 
-		
 		Log.v(TAG, "onCreate");
 
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -81,79 +67,125 @@ public class NodeActivity extends Activity {
 			finish();
 			return;
 		}
-
-		mSensorImageView = (ImageView) findViewById(R.id.sensor_select_image_view);
-		mNodeImageView = (ImageView) findViewById(R.id.node_image_view);
-		mActuatorImageView = (ImageView) findViewById(R.id.actuator_select_image_view);
-
-		mSensorImageView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(NodeActivity.this,
-						SensorListActivity.class);
-				startActivity(intent);
-			}
-		});
-
-		mActuatorImageView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(NodeActivity.this,
-						ActuatorListActivity.class);
-				startActivity(intent);
-			}
-		});
-
-		mNodeImageView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(NodeActivity.this,
-						MapActivity.class);
-				startActivity(intent);
-			}
-		});
-
-		mConnectButton = (Button) findViewById(R.id.connect_button);
-		// Handler Disconnect & Connect button
-		mConnectButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!mBtAdapter.isEnabled()) {
-					Log.i(TAG, "onClick - BT not enabled yet");
-					Intent enableIntent = new Intent(
-							BluetoothAdapter.ACTION_REQUEST_ENABLE);
-					startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-				} else {
-
-					Log.d(TAG, "Button onClick - ");
-					if (mService == null) {
-						Log.d(TAG, "Service is Null");
-					} else {
-						Log.d(TAG,
-								"Service State : "
-										+ mService.getConnectionState());
-					}
-
-					if (mConnectButton.getText().toString().equals("Connect")) {
-
-						// Connect button pressed, open DeviceListActivity
-						// class, with popup windows that scan for devices
-
-						Intent newIntent = new Intent(NodeActivity.this,
-								DeviceListActivity.class);
-						startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
-					} else {
-						// Disconnect button pressed
-						if (mService != null) {
-							mService.disconnect();
-						}
-
-					}
-				}
-			}
-		});
-
 		service_init();
+
+		setContentView(R.layout.main);
+		mListView = (ListView) findViewById(R.id.task_list_view);
+
+		mDataCenter = DataCenter.getInstance();
+
+		if (mDataCenter.taskListAdapter == null) {
+			mListAdapter = new TaskArrayAdapter(this, mDataCenter.taskList);
+			mDataCenter.taskListAdapter = mListAdapter;
+		} else {
+			mListAdapter = mDataCenter.taskListAdapter;
+		}
+
+		mListAdapter.add(new Task("Task 1"));
+		mListAdapter.add(new Task("Task 2"));
+		mListView.setAdapter(mListAdapter);
+
+		// Create a ListView-specific touch listener. ListViews are given
+		// special treatment because
+		// by default they handle touches for their list items... i.e. they're
+		// in charge of drawing
+		// the pressed state (the list selector), handling list item clicks,
+		// etc.
+		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(
+				mListView,
+				new SwipeDismissListViewTouchListener.DismissCallbacks() {
+					@Override
+					public boolean canDismiss(int position) {
+						return true;
+					}
+
+					@Override
+					public void onDismiss(ListView listView,
+							int[] reverseSortedPositions) {
+						for (int position : reverseSortedPositions) {
+							if (position != mListAdapter.getCount()) {
+								mListAdapter.remove(mListAdapter
+										.getItem(position));
+							}
+						}
+						mListAdapter.notifyDataSetChanged();
+					}
+				});
+		mListView.setOnTouchListener(touchListener);
+		// Setting this scroll listener is required to ensure that during
+		// ListView scrolling,
+		// we don't look for swipes.
+		mListView.setOnScrollListener(touchListener.makeScrollListener());
+
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+			}
+		});
+	}
+
+	public void selectSensor(View v) {
+		Intent intent = new Intent(NodeActivity.this, GroveListActivity.class);
+		intent.putExtra(DataCenter.NEXT, DataCenter.BACK);
+		intent.putExtra(DataCenter.TYPE, DataCenter.SENSOR);
+		startActivity(intent);
+	}
+
+	public void selectActuator(View v) {
+		Intent intent = new Intent(NodeActivity.this,
+				GroveListActivity.class);
+		intent.putExtra(DataCenter.NEXT, DataCenter.BACK);
+		intent.putExtra(DataCenter.TYPE, DataCenter.ACTUATOR);
+		startActivity(intent);
+	}
+
+	public void addTask(View v) {
+		
+		Intent intent;
+		Grove grove = mDataCenter.getCurrentSensor();
+		if (grove != null) {
+			intent = new Intent(this, grove.activity);
+		} else {
+			intent = new Intent(this, GroveListActivity.class);
+			intent.putExtra(DataCenter.NEXT, DataCenter.FORWARD);
+			intent.putExtra(DataCenter.TYPE, DataCenter.SENSOR);
+		}
+		
+		startActivity(intent);
+	}
+
+	public void connect() {
+		if (!mBtAdapter.isEnabled()) {
+			Log.i(TAG, "BT not enabled yet");
+			Intent enableIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		} else {
+
+			Log.d(TAG, "Action - connect");
+			if (mService == null) {
+				Log.d(TAG, "Service is Null");
+				return;
+			} else {
+				Log.d(TAG, "Service State : " + mService.getConnectionState());
+			}
+
+			if (mService.getConnectionState() != UartService.STATE_CONNECTED) {
+				// Start DeviceListActivity to scan for devices
+				Intent newIntent = new Intent(NodeActivity.this,
+						DeviceListActivity.class);
+				startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
+			} else {
+				// Disconnect button pressed
+				if (mService != null) {
+					mService.disconnect();
+				}
+
+			}
+		}
 	}
 
 	// UART service connected/disconnected
@@ -170,15 +202,7 @@ public class NodeActivity extends Activity {
 
 			runOnUiThread(new Runnable() {
 				public void run() {
-					if (mService.getConnectionState() != 2) {
-						mConnectButton.setText("Connect");
-						
-//						Intent newIntent = new Intent(NodeActivity.this,
-//								DeviceListActivity.class);
-//						startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
-					} else {
-						mConnectButton.setText("Disconnect");
-					}
+
 				}
 			});
 
@@ -186,8 +210,6 @@ public class NodeActivity extends Activity {
 
 		public void onServiceDisconnected(ComponentName classname) {
 			Log.d(TAG, "onServiceDisconnected");
-			// // mService.disconnect(mDevice);
-			// mService = null;
 		}
 	};
 
@@ -213,7 +235,6 @@ public class NodeActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						Log.d(TAG, "UART_CONNECT_MSG");
-						mConnectButton.setText("Disconnect");
 						mState = UART_PROFILE_CONNECTED;
 					}
 				});
@@ -226,12 +247,7 @@ public class NodeActivity extends Activity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						Log.d(TAG, "UART_DISCONNECT_MSG");
-						mConnectButton.setText("Connect");
 						mState = UART_PROFILE_DISCONNECTED;
-//						mService.close();
-//						mService = null;
-						// setUiState();
-
 					}
 				});
 			}
@@ -250,15 +266,12 @@ public class NodeActivity extends Activity {
 						try {
 							String rxString = new String(rxValue, "UTF-8");
 							Log.d(TAG, "RX: " + rxString);
-							
+
 							String[] slices = rxString.split(" ");
 							if (slices[0].equals("i") && (slices.length == 3)) {
 								int dimention = Integer.parseInt(slices[1]);
 								double value = Float.parseFloat(slices[2]);
 								value = ((int) (value * 10)) / 10.0;
-//								if (mDataCenter.getSensorId() != -1) {
-//									mSensorHintTextView.setText(String.valueOf(value));
-//								}
 							}
 						} catch (Exception e) {
 							Log.e(TAG, e.toString());
@@ -305,28 +318,6 @@ public class NodeActivity extends Activity {
 		LocalBroadcastManager.getInstance(this).registerReceiver(
 				UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
 
-		// if (mService == null || mService.getConnectionState() != 2) {
-		// mConnectButton.setText("Connect");
-		// } else {
-		// mConnectButton.setText("Disconnect");
-		// }
-		
-		mDataCenter = DataCenter.getInstance();
-		if (mDataCenter.getSensorId() == -1) {
-			mSensorHintLayout.setVisibility(View.VISIBLE);
-			mActuatorHintLayout.setVisibility(View.INVISIBLE);
-		} else {
-			mSensorHintLayout.setVisibility(View.INVISIBLE);
-			if (mDataCenter.getActuatorId() == -1) {
-				mActuatorHintLayout.setVisibility(View.VISIBLE);
-			} else {
-				mActuatorHintLayout.setVisibility(View.INVISIBLE);
-//				mSensorHintLayout.setVisibility(View.VISIBLE);
-//				if (mSensorHintTextView.getText().toString().equals("Select a")) {
-//					mSensorHintTextView.setText("N/A");
-//				}
-			}
-		}
 	}
 
 	@Override
@@ -336,13 +327,6 @@ public class NodeActivity extends Activity {
 
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(
 				UARTStatusChangeReceiver);
-
-		// if (mConnected) {
-		// mConnected = false;
-		// if (mDevice != null) {
-		// mService.disconnect();
-		// }
-		// }
 	}
 
 	@Override
@@ -413,7 +397,6 @@ public class NodeActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.node, menu);
 		return true;
@@ -421,6 +404,14 @@ public class NodeActivity extends Activity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		String title;
+		if (mService != null && mService.getConnectionState() == UartService.STATE_CONNECTED) {
+			title = "DISCONNECT";
+		} else {
+			title = "CONNECT";
+		}
+		menu.findItem(R.id.action_connect).setTitle(title);
+		
 		return true;
 	}
 
@@ -430,7 +421,9 @@ public class NodeActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_connect) {
+			connect();
+		} else if (id == R.id.action_settings) {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

@@ -1,10 +1,6 @@
 package com.seeedstudio.node.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -25,8 +21,6 @@ public class SensorListActivity extends DeviceBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sensor_list);
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
 		mDataCenter = DataCenter.getInstance();
 		mListAdapter = new GroveArrayAdapter(this, mDataCenter.sensorList);
 		
@@ -39,31 +33,16 @@ public class SensorListActivity extends DeviceBaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				int sensor = position;
 
 				String command = "s " + position;
 				configureDevice(command.getBytes());
-				mDataCenter.setSensorId(position);
-				Intent intent = new Intent(SensorListActivity.this, SensorActivity.class);
-				intent.putExtra("sensor", sensor);
-				startActivity(intent);
+				
+				Grove sensor = mListAdapter.getItem(position);
+				mDataCenter.setSensor(sensor);
+				
+				SensorListActivity.this.finish();
 			}
 	    	
 	    });
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == android.R.id.home) {
-	        NavUtils.navigateUpFromSameTask(this);
-	        return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

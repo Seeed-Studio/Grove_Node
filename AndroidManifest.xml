@@ -35,6 +35,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.seeedstudio.node.ui.GroveListActivity"
+            android:label="@string/title_activity_grove_list"
+            android:theme="@style/GroveListTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.seeedstudio.node.ui.NodeActivity" />
+        </activity>
+        <activity
             android:name="com.seeedstudio.node.ui.SensorListActivity"
             android:label="@string/title_activity_sensor_list"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
@@ -45,13 +53,6 @@
         <activity
             android:name="com.seeedstudio.node.ui.SensorActivity"
             android:label="@string/title_activity_sensor" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.seeedstudio.node.ui.SensorListActivity" />
-        </activity>
-        <activity
-            android:name="com.seeedstudio.node.ui.MapActivity"
-            android:label="@string/title_activity_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.seeedstudio.node.ui.NodeActivity" />
@@ -69,7 +70,7 @@
             android:label="@string/title_activity_led" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.seeedstudio.node.ui.ActuatorListActivity" />
+                android:value="com.seeedstudio.node.ui.NodeActivity" />
         </activity>
         <activity
             android:name="com.seeedstudio.node.ble.DeviceBaseActivity"
@@ -80,14 +81,14 @@
             android:label="@string/title_activity_relay" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.seeedstudio.node.ui.ActuatorListActivity" />
+                android:value="com.seeedstudio.node.ui.NodeActivity" />
         </activity>
         <activity
             android:name="com.seeedstudio.node.ui.ColorPixelsActivity"
             android:label="@string/title_activity_color_pixels" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.seeedstudio.node.ui.ActuatorListActivity" />
+                android:value="com.seeedstudio.node.ui.NodeActivity" />
         </activity>
     </application>
 

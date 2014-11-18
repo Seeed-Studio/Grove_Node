@@ -39,7 +39,7 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 		mColorPicker.addSVBar(svbar);
 		mColorPicker.setOnColorChangedListener(this);
 		
-		mActionList = mDataCenter.actuatorActionList;
+		mActionList = mDataCenter.actionList;
 		
 		if (mActionList.isEmpty()) {
 			float[] offData = {0, 0, 0};

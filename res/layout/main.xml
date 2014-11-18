@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <FrameLayout
+            android:id="@+id/node_layout"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp" >
+
+            <ImageView
+                android:id="@+id/node_image_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/green_rectangle" />
+
+            <TextView
+                android:id="@+id/node_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="@string/node"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/sensor_select_layout"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_alignRight="@id/node_layout"
+            android:layout_alignTop="@id/node_layout"
+            android:layout_marginRight="115dp" >
+
+            <ImageView
+                android:id="@+id/sensor_select_image_view"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:onClick="selectSensor"
+                android:src="@drawable/yellow_circle" />
+
+            <TextView
+                android:id="@+id/sensor_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="@string/sensor"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/actuator_select_layout"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_alignLeft="@id/node_layout"
+            android:layout_alignTop="@id/node_layout"
+            android:layout_marginLeft="115dp"
+            android:layout_toRightOf="@+id/node_layout" >
+
+            <ImageView
+                android:id="@+id/actuator_select_image_view"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:onClick="selectActuator"
+                android:src="@drawable/blue_circle" />
+
+            <TextView
+                android:id="@+id/actuator_select_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="@string/actuator"
+                android:textSize="16sp"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/task_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp" >
+    </ListView>
+    
+    <Button
+        android:id="@+id/connect_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#204a87"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="addTask"
+        android:text="Add a task"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>

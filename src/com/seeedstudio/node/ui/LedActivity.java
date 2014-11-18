@@ -29,7 +29,7 @@ public class LedActivity extends DeviceBaseActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.led);
 
-		mActionList = mDataCenter.actuatorActionList;
+		mActionList = mDataCenter.actionList;
 
 		if (mActionList.isEmpty()) {
 			float[] onData = { 0 };

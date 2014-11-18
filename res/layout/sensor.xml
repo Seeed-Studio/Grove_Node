@@ -1,72 +1,83 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="com.seeedstudio.node.ui.SensorActivity" >
+    android:layout_height="match_parent" >
 
-    <ListView
-        android:id="@+id/data_list_view"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" >
-    </ListView>
-
-    <ListView
-        android:id="@+id/event_list_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/data_list_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="32dp" >
-    </ListView>
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/add_event_button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
-        android:onClick="addEvent"
-        android:text="Add a event" />
+        <ListView
+            android:id="@+id/data_list_view"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal" >
+        </ListView>
 
-    <TextView
-        android:id="@+id/operator_text_view"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_above="@+id/add_event_button"
-        android:layout_centerHorizontal="true"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:onClick="changeOperator"
-        android:text=">"
-        android:textSize="32sp" />
+        <ListView
+            android:id="@+id/event_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="1" >
+        </ListView>
 
-    <ImageView
-        android:id="@+id/type_image_view"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_above="@+id/add_event_button"
-        android:layout_toLeftOf="@+id/operator_text_view"
-        android:layout_marginRight="32dp"
-        android:onClick="changeType"
-        android:src="@drawable/percentage" />
+        <Button
+            android:id="@+id/connect_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="#204a87"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="next"
+            android:text="Next"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/value_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/add_event_button"
-        android:layout_toRightOf="@id/operator_text_view"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Value"
-        android:inputType="numberDecimal|numberSigned"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
-    </EditText>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_gravity="bottom" >
 
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp" >
+
+            <TextView
+                android:id="@+id/operator_text_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="false"
+                android:clickable="true"
+                android:onClick="changeOperator"
+                android:text=">"
+                android:textSize="32sp" />
+
+            <ImageView
+                android:id="@+id/type_image_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignBottom="@+id/operator_text_view"
+                android:layout_marginRight="32dp"
+                android:layout_toLeftOf="@+id/operator_text_view"
+                android:onClick="changeType"
+                android:src="@drawable/percentage" />
+
+            <EditText
+                android:id="@+id/value_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/operator_text_view"
+                android:layout_toRightOf="@id/operator_text_view"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Value"
+                android:inputType="numberDecimal|numberSigned"
+                android:textAppearance="?android:attr/textAppearanceLarge" >
+            </EditText>
+        </RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>

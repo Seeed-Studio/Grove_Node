@@ -29,7 +29,7 @@ public class RelayActivity extends DeviceBaseActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.relay);
 
-		mActionList = mDataCenter.actuatorActionList;
+		mActionList = mDataCenter.actionList;
 
 		if (mActionList.isEmpty()) {
 			float[] onData = { 0 };

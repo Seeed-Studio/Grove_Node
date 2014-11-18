@@ -44,30 +44,31 @@ public class SensorActivity extends DeviceBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		int id = getIntent().getExtras().getInt("sensor");
-
-		mDataCenter = DataCenter.getInstance();
-		Grove sensor = mDataCenter.getSensors()[id];
-
-		setTitle(sensor.name);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+
 		setContentView(R.layout.sensor);
-
-		mSensorData = (SensorData[]) sensor.data;
-		mDataListAdapter = new SensorDataArrayAdapter(this, mSensorData);
 		mDataListView = (ListView) findViewById(R.id.data_list_view);
-		mDataListView.setAdapter(mDataListAdapter);
-
-		mEventListAdapter = new SensorEventArrayAdapter(this,
-				mDataCenter.sensorEventList);
 		mEventListView = (ListView) findViewById(R.id.event_list_view);
-		mEventListView.setAdapter(mEventListAdapter);
 
 		View header = getLayoutInflater().inflate(R.layout.list_header, null);
 		TextView text = (TextView) header.findViewById(R.id.header_text_view);
 		text.setText("Event List");
 
 		mEventListView.addHeaderView(header);
+		
+		mDataCenter = DataCenter.getInstance();
+		Grove sensor = mDataCenter.getCurrentSensor();
+		setTitle(sensor.name);
+		
+		mSensorData = (SensorData[]) sensor.data;
+		mDataListAdapter = new SensorDataArrayAdapter(this, mSensorData);
+		mDataListView.setAdapter(mDataListAdapter);
+
+		mEventListAdapter = new SensorEventArrayAdapter(this,
+				mDataCenter.eventList);
+		mEventListView.setAdapter(mEventListAdapter);
+		
+		
 
 		// Create a ListView-specific touch listener. ListViews are given
 		// special treatment because
@@ -110,6 +111,26 @@ public class SensorActivity extends DeviceBaseActivity {
 
 		mCurrentDataIndex = 0;
 		mTypeImageView.setImageResource(mSensorData[mCurrentDataIndex].image);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+	
+	public void next(View v) {
+		Intent intent;
+		
+		Grove grove = mDataCenter.getCurrentActuator();
+		if (grove != null) {
+			intent = new Intent(this, grove.activity);
+		} else {
+			intent = new Intent(this, GroveListActivity.class);
+			intent.putExtra(DataCenter.NEXT, DataCenter.FORWARD);
+			intent.putExtra(DataCenter.TYPE, DataCenter.ACTUATOR);
+		}
+		
+		startActivity(intent);
 	}
 
 	public void changeType(View v) {
@@ -183,7 +204,7 @@ public class SensorActivity extends DeviceBaseActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.sensor, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
@@ -195,10 +216,6 @@ public class SensorActivity extends DeviceBaseActivity {
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
 			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		} else if (id == R.id.action_done) {
-			Intent intent = new Intent(this, NodeActivity.class);
-			startActivity(intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
