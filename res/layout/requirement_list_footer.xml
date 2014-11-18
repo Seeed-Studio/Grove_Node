@@ -2,10 +2,10 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header_text_view"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:background="#204a87"
+    android:layout_height="48dp"
+    android:background="#4e9a06"
     android:gravity="center"
-    android:text="Add a task"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:height="64dp" />
+    android:text="Add a requirement"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:height="48dp" />
 

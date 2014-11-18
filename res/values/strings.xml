@@ -66,6 +66,8 @@
     <string name="title_activity_color_pixels">Color Pixels</string>
     <string name="title_activity_sensor">Sensor</string>
     <string name="title_activity_grove_list">Select a Grove</string>
+    <string name="change">Change</string>
+    <string name="title_activity_transition">TransitionActivity</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>

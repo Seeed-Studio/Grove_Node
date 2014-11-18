@@ -53,8 +53,6 @@ public class NodeActivity extends Activity {
 	private TaskArrayAdapter mListAdapter;
 	private ListView mListView;
 
-	private MenuItem mConnectMenuItem;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

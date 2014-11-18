@@ -16,10 +16,10 @@
         </ListView>
 
         <ListView
-            android:id="@+id/event_list_view"
+            android:id="@+id/requirement_list_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
+            android:layout_margin="16dp"
             android:layout_weight="1" >
         </ListView>
 
@@ -35,49 +35,62 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
-    <FrameLayout
+    <RelativeLayout
+        android:id="@+id/add_requirement_layout"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_gravity="bottom" >
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:background="#555555"
+        android:visibility="invisible" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="160dp" >
+        <TextView
+            android:id="@+id/operator_text_view"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:onClick="changeOperator"
+            android:text=">"
+            android:textSize="32sp" />
 
-            <TextView
-                android:id="@+id/operator_text_view"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerInParent="false"
-                android:clickable="true"
-                android:onClick="changeOperator"
-                android:text=">"
-                android:textSize="32sp" />
+        <EditText
+            android:id="@+id/value_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/operator_text_view"
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@id/operator_text_view"
+            android:ems="10"
+            android:hint="Value"
+            android:inputType="numberDecimal|numberSigned"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </EditText>
 
-            <ImageView
-                android:id="@+id/type_image_view"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignBottom="@+id/operator_text_view"
-                android:layout_marginRight="32dp"
-                android:layout_toLeftOf="@+id/operator_text_view"
-                android:onClick="changeType"
-                android:src="@drawable/percentage" />
+        <TextView
+            android:id="@+id/logic_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignBottom="@+id/operator_text_view"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="changeLogic"
+            android:textSize="32sp" />
 
-            <EditText
-                android:id="@+id/value_edit_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/operator_text_view"
-                android:layout_toRightOf="@id/operator_text_view"
-                android:layout_weight="1"
-                android:ems="10"
-                android:hint="Value"
-                android:inputType="numberDecimal|numberSigned"
-                android:textAppearance="?android:attr/textAppearanceLarge" >
-            </EditText>
-        </RelativeLayout>
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/type_image_view"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignBottom="@+id/operator_text_view"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/logic_text_view"
+            android:clickable="true"
+            android:onClick="changeType"
+            android:src="@drawable/temperature" />
+    </RelativeLayout>
 
 </FrameLayout>

@@ -43,24 +43,8 @@
                 android:value="com.seeedstudio.node.ui.NodeActivity" />
         </activity>
         <activity
-            android:name="com.seeedstudio.node.ui.SensorListActivity"
-            android:label="@string/title_activity_sensor_list"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.seeedstudio.node.ui.NodeActivity" />
-        </activity>
-        <activity
             android:name="com.seeedstudio.node.ui.SensorActivity"
             android:label="@string/title_activity_sensor" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.seeedstudio.node.ui.NodeActivity" />
-        </activity>
-        <activity
-            android:name="com.seeedstudio.node.ui.ActuatorListActivity"
-            android:label="@string/title_activity_actuator_list"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.seeedstudio.node.ui.NodeActivity" />
@@ -89,6 +73,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.seeedstudio.node.ui.NodeActivity" />
+        </activity>
+        <activity
+            android:name="com.seeedstudio.node.TransitionActivity"
+            android:label="@string/title_activity_transition" >
         </activity>
     </application>
 

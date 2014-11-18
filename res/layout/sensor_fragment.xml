@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#222222"
+    tools:context="com.seeedstudio.node.SensorActivity$PlaceholderFragment" >
+
+            <TextView
+                android:id="@+id/operator_text_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:clickable="true"
+                android:onClick="changeOperator"
+                android:text=">"
+                android:textSize="32sp" />
+
+            <ImageView
+                android:id="@+id/type_image_view"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignBottom="@+id/operator_text_view"
+                android:layout_marginRight="32dp"
+                android:layout_toLeftOf="@+id/operator_text_view"
+                android:src="@drawable/temperature" />
+
+            <EditText
+                android:id="@+id/value_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/operator_text_view"
+                android:layout_toRightOf="@id/operator_text_view"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Value"
+                android:inputType="numberDecimal|numberSigned"
+                android:textAppearance="?android:attr/textAppearanceLarge" >
+            </EditText>
+
+            <Button
+                android:id="@+id/add_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Button" />
+
+</RelativeLayout>

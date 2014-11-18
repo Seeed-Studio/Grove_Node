@@ -28,7 +28,7 @@
         android:clickable="true"
         android:gravity="center"
         android:onClick="addTask"
-        android:text="Add task"
+        android:text="Done"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
