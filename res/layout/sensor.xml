@@ -24,7 +24,7 @@
         </ListView>
 
         <Button
-            android:id="@+id/connect_text_view"
+            android:id="@+id/next_button"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:background="#204a87"

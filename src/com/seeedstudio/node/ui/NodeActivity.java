@@ -81,8 +81,6 @@ public class NodeActivity extends Activity {
 			mListAdapter = mDataCenter.taskListAdapter;
 		}
 
-		mListAdapter.add(new Task("Task 1"));
-		mListAdapter.add(new Task("Task 2"));
 		mListView.setAdapter(mListAdapter);
 
 		// Create a ListView-specific touch listener. ListViews are given
