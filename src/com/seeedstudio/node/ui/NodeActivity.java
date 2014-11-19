@@ -65,6 +65,15 @@ public class NodeActivity extends Activity {
 			finish();
 			return;
 		}
+		
+		if (!mBtAdapter.isEnabled()) {
+			Intent enableIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+		}
+
+
+		
 		service_init();
 
 		setContentView(R.layout.main);
@@ -225,13 +234,15 @@ public class NodeActivity extends Activity {
 			final Intent mIntent = intent;
 			// *********************//
 			if (action.equals(UartService.ACTION_GATT_CONNECTED)) {
-				Log.d(TAG, "Connected to: " + mDevice.getName());
+//				Log.d(TAG, "Connected to: " + mDevice.getName());
 				mConnected = true;
 
 				runOnUiThread(new Runnable() {
 					public void run() {
 						Log.d(TAG, "UART_CONNECT_MSG");
 						mState = UART_PROFILE_CONNECTED;
+						
+						invalidateOptionsMenu();
 					}
 				});
 			}
@@ -244,6 +255,8 @@ public class NodeActivity extends Activity {
 					public void run() {
 						Log.d(TAG, "UART_DISCONNECT_MSG");
 						mState = UART_PROFILE_DISCONNECTED;
+						
+						invalidateOptionsMenu();
 					}
 				});
 			}
@@ -285,8 +298,11 @@ public class NodeActivity extends Activity {
 	};
 
 	private void service_init() {
-		Intent bindIntent = new Intent(this, UartService.class);
-		bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		Intent intent = new Intent(this, UartService.class);
+		startService(intent);
+		bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+		LocalBroadcastManager.getInstance(this).registerReceiver(
+				UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
 
 	}
 
@@ -305,15 +321,6 @@ public class NodeActivity extends Activity {
 		super.onResume();
 		Log.v(TAG, "onResume");
 
-		if (!mBtAdapter.isEnabled()) {
-			Intent enableIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-		}
-
-		LocalBroadcastManager.getInstance(this).registerReceiver(
-				UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
-
 	}
 
 	@Override
@@ -321,8 +328,8 @@ public class NodeActivity extends Activity {
 		super.onPause();
 		Log.v(TAG, "onPause");
 
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(
-				UARTStatusChangeReceiver);
+//		LocalBroadcastManager.getInstance(this).unregisterReceiver(
+//				UARTStatusChangeReceiver);
 	}
 
 	@Override
@@ -331,6 +338,7 @@ public class NodeActivity extends Activity {
 
 		Log.v(TAG, "onDestroy");
 
+		unbindService(mServiceConnection);
 		Intent intent = new Intent(this, UartService.class);
 		stopService(intent);
 	}

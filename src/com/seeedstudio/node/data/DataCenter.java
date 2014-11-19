@@ -18,11 +18,11 @@ public class DataCenter {
 	
 	public ArrayList<Grove> sensorList;
 	public ArrayList<Grove> actuatorList;
-	public ArrayList<SensorEvent> eventList;
-	public ArrayList<ActuatorAction> actionList;
 	public ArrayList<Task> taskList;
 	public TaskArrayAdapter taskListAdapter;
 	public ArrayList<String> iftttList;
+	public ArrayList<Requirement> requirements;
+	
 	
 	private Grove mCurrentSensor;
 	private Grove mCurrentActuator;
@@ -64,15 +64,7 @@ public class DataCenter {
 		actuatorList.add(new Grove("Color Pixels", 1, 1,
 				R.drawable.color_pixels_strip, ColorPixelsActivity.class));
 
-		eventList = new ArrayList<SensorEvent>();
-		actionList = new ArrayList<ActuatorAction>();
-		iftttList = new ArrayList<String>();
 		taskList = new ArrayList<Task>();
-		
-		taskListAdapter = null;
-
-		mCurrentSensor = null;
-		mCurrentActuator = null;
 	}
 
 	private static class LazyHolder {

@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -136,19 +137,17 @@ public class SensorActivity extends DeviceBaseActivity implements
 					float value;
 					try {
 						value = Float.parseFloat(valueString);
+						SensorData data = new SensorData(
+								mSensorData[mCurrentDataIndex].type, value);
+						Requirement requirement = new Requirement(operator,
+								data, logic);
+						mRequirementListAdapter.add(requirement);
 					} catch (NumberFormatException e) {
 						Log.d(TAG, "Invalid Input");
 						return true;
 					}
-	
-					SensorData data = new SensorData(
-							mSensorData[mCurrentDataIndex].type, value);
-	
+
 					mValueEditText.setText("");
-	
-					Requirement requirement = new Requirement(operator, data, logic);
-					mRequirementListAdapter.add(requirement);
-	
 					mRequirementLayout.setVisibility(View.INVISIBLE);
 				}
 
@@ -163,10 +162,18 @@ public class SensorActivity extends DeviceBaseActivity implements
 			if (mRequirementListAdapter.isEmpty()) {
 				mLogicTextView.setText("");
 			} else {
-				mLogicTextView.setText("and");
+				mLogicTextView.setText("AND");
 			}
-			
+
 			mRequirementLayout.setVisibility(View.VISIBLE);
+			mRequirementLayout.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// 
+				}
+				
+			});
 			mValueEditText.requestFocus();
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.showSoftInput(mValueEditText, InputMethodManager.SHOW_IMPLICIT);
@@ -174,8 +181,10 @@ public class SensorActivity extends DeviceBaseActivity implements
 	}
 
 	public void next(View v) {
-		Intent intent;
+		mDataCenter.requirements = (ArrayList<Requirement>) mRequirementList
+				.clone();
 
+		Intent intent;
 		Grove grove = mDataCenter.getCurrentActuator();
 		if (grove != null) {
 			intent = new Intent(this, grove.activity);
@@ -231,13 +240,13 @@ public class SensorActivity extends DeviceBaseActivity implements
 
 		mOperatorTextView.setText(operator);
 	}
-	
+
 	public void changeLogic(View v) {
 		String logic = mLogicTextView.getText().toString();
-		if (logic.equals(">")) {
-			logic = "and";
+		if (logic.equals("OR")) {
+			logic = "AND";
 		} else {
-			logic = "or";
+			logic = "OR";
 		}
 
 		mLogicTextView.setText(logic);

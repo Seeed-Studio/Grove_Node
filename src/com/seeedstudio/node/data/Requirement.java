@@ -20,6 +20,11 @@ public class Requirement {
 	
 	@Override
 	public String toString() {
-		return logic + " " + data.name + " " + operator + " " + DataCenter.floatToString(data.data);
+		String description = data.name + " " + operator + " " + DataCenter.floatToString(data.data);
+		if (!logic.equals("")) {
+			description = logic + "   " + description;
+		}
+		
+		return description;
 	}
 }

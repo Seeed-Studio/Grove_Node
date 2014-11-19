@@ -13,6 +13,7 @@ import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.SVBar;
 import com.seeedstudio.node.R;
 import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.data.ActuatorAction;
 import com.seeedstudio.node.data.DataCenter;
 import com.seeedstudio.node.data.Task;
 
@@ -38,7 +39,13 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 	
 	public void addTask(View v) {
 		int count = mDataCenter.taskListAdapter.getCount();
-		mDataCenter.taskListAdapter.add(new Task("Task" + count));
+		float[] rgb = new float[3];
+		int color = mColorPicker.getColor();
+		rgb[2] = color & 0xFF;
+		rgb[1] = (color >> 8) & 0xFF;
+		rgb[0] = (color >> 16) & 0xFF;
+		ActuatorAction action = new ActuatorAction("action " + count, rgb);
+		mDataCenter.taskListAdapter.add(new Task(count, mDataCenter.requirements, action));
 		
 		Intent intent = new Intent(this, NodeActivity.class);
 		startActivity(intent);

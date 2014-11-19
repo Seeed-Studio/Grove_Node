@@ -11,9 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.seeedstudio.node.R;
-import com.seeedstudio.node.data.DataCenter;
-import com.seeedstudio.node.data.SensorData;
-import com.seeedstudio.node.data.SensorEvent;
 import com.seeedstudio.node.data.Task;
 
 
@@ -35,10 +32,11 @@ public class TaskArrayAdapter extends ArrayAdapter<Task> {
 	    View rowView = inflater.inflate(R.layout.task, parent, false);
 	    
 	    TextView nameView = (TextView) rowView.findViewById(R.id.name_text_view);
-	    ImageView imageView = (ImageView) rowView.findViewById(R.id.image_view);
+	    TextView textView = (TextView) rowView.findViewById(R.id.description_text_view);
 	    
 	    Task task = list.get(position);
 	    nameView.setText(task.name);
+	    textView.setText(task.requirements.toString());
 
 	    return rowView;
 	  }
