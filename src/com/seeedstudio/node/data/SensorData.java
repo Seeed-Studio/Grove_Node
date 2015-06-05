@@ -1,6 +1,6 @@
 package com.seeedstudio.node.data;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 
 public class SensorData {
 	static final public int UNKNOWN    = 0;

@@ -15,14 +15,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.seeedstudio.node.R;
 import com.seeedstudio.node.data.DataCenter;
-import com.seeedstudio.node.ui.NodeActivity;
 
 public class DeviceBaseActivity extends Activity {
 	private static final String TAG = "Node Device Base";

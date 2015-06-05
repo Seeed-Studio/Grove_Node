@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-import com.seeedstudio.node.R;
 import com.seeedstudio.node.data.DataCenter;
 import com.seeedstudio.node.data.Grove;
 

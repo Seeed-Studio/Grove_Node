@@ -11,17 +11,19 @@ import android.view.View;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.SVBar;
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.ble.UartService;
 import com.seeedstudio.node.data.ActuatorAction;
 import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.Grove;
 import com.seeedstudio.node.data.Task;
 
 public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorChangedListener{
 	private static final String TAG = "Node Color Pixels";
 	
-	private DataCenter mDataCenter;
 	private ColorPicker mColorPicker;
+	private Grove mActuator;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 		mColorPicker.addSVBar(svbar);
 		mColorPicker.setOnColorChangedListener(this);
 		
-		mDataCenter = DataCenter.getInstance();
+		mActuator = mDataCenter.getCurrentActuator();
 	}
 	
 	public void addTask(View v) {
@@ -57,11 +59,20 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 		int green = (color >> 8) & 0xFF;
 		int red = (color >> 16) & 0xFF;
 		
-		String command = "o " + red + " " + green + " " + blue;
+		String command = "o " + red + " " + green + " " + blue + " 0";
 
 		configureDevice(command.getBytes());
 		
 		Log.d(TAG, "Sending: " + command);
+	}
+	
+	@Override
+	protected void onServiceStateChanged(int state) {
+		if (state == UartService.STATE_CONNECTED) {
+			String command = "a " + mActuator.driver;
+
+			configureDevice(command.getBytes());
+		}
 	}
 	
 	@Override
@@ -90,11 +101,4 @@ public class ColorPixelsActivity extends DeviceBaseActivity implements OnColorCh
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	@Override
-	protected void onServiceStateChanged(int state) {
-		
-	}
-
-
 }

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.data.Requirement;
 
 public class RequirementArrayAdapter extends ArrayAdapter<Requirement> {

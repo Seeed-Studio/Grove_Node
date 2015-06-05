@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -24,8 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.ble.UartService;
 import com.seeedstudio.node.data.DataCenter;
 import com.seeedstudio.node.data.Grove;
 import com.seeedstudio.node.data.Requirement;
@@ -52,6 +52,7 @@ public class SensorActivity extends DeviceBaseActivity implements
 	private EditText mValueEditText;
 
 	private int mCurrentDataIndex;
+	private Grove mSensor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +69,10 @@ public class SensorActivity extends DeviceBaseActivity implements
 		mRequirementListView.addFooterView(footer);
 
 		mDataCenter = DataCenter.getInstance();
-		Grove sensor = mDataCenter.getCurrentSensor();
-		setTitle(sensor.name);
+		mSensor = mDataCenter.getCurrentSensor();
+		setTitle(mSensor.name);
 
-		mSensorData = (SensorData[]) sensor.data;
+		mSensorData = (SensorData[]) mSensor.data;
 		mDataListAdapter = new SensorDataArrayAdapter(this, mSensorData);
 		mDataListView.setAdapter(mDataListAdapter);
 
@@ -276,6 +277,15 @@ public class SensorActivity extends DeviceBaseActivity implements
 			}
 		}
 
+	}
+	
+	@Override
+	protected void onServiceStateChanged(int state) {
+		if (state == UartService.STATE_CONNECTED) {
+			String command = "s " + mSensor.driver;
+
+			configureDevice(command.getBytes());
+		}
 	}
 
 	@Override

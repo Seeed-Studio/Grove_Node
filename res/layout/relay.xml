@@ -2,14 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <ListView
-        android:id="@+id/action_list_view"
-        android:layout_width="match_parent"
+    
+    <Switch
+        android:id="@+id/relay_switch"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="16dp" >
-    </ListView>
+        android:layout_marginTop="160dp" />
+    
+    <Button
+        android:id="@+id/done_button"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="#204a87"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="addTask"
+        android:text="Done"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

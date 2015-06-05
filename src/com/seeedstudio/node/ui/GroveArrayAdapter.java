@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.data.Grove;
 
 public class GroveArrayAdapter extends ArrayAdapter<Grove> {

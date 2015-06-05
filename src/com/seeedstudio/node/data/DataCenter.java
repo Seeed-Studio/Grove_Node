@@ -2,7 +2,7 @@ package com.seeedstudio.node.data;
 
 import java.util.ArrayList;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.ui.ColorPixelsActivity;
 import com.seeedstudio.node.ui.LedActivity;
 import com.seeedstudio.node.ui.RelayActivity;
@@ -61,7 +61,7 @@ public class DataCenter {
 				RelayActivity.class));
 		actuatorList.add(new Grove("LED", 1, 1, R.drawable.grove_led,
 				LedActivity.class));
-		actuatorList.add(new Grove("Color Pixels", 1, 1,
+		actuatorList.add(new Grove("Color Pixels", 1, 2,
 				R.drawable.color_pixels_strip, ColorPixelsActivity.class));
 
 		taskList = new ArrayList<Task>();

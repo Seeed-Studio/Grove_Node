@@ -24,12 +24,11 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.ble.DeviceListActivity;
 import com.seeedstudio.node.ble.UartService;
 import com.seeedstudio.node.data.DataCenter;
 import com.seeedstudio.node.data.Grove;
-import com.seeedstudio.node.data.Task;
 
 public class NodeActivity extends Activity {
 	private static final String TAG = "Node";

@@ -1,31 +1,78 @@
 package com.seeedstudio.node.ui;
 
-import java.util.ArrayList;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
-import com.seeedstudio.node.R;
+import com.seeedstudio.grove_node.R;
 import com.seeedstudio.node.ble.DeviceBaseActivity;
+import com.seeedstudio.node.ble.UartService;
 import com.seeedstudio.node.data.ActuatorAction;
 import com.seeedstudio.node.data.DataCenter;
+import com.seeedstudio.node.data.Grove;
+import com.seeedstudio.node.data.Task;
 
 public class RelayActivity extends DeviceBaseActivity {
 	private static final String TAG = "Node Relay";
+	
+	private Grove mActuator;
+	private Switch mSwitch;
+	private boolean mSwitchIsOn = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.relay);
+		
+		mSwitch = (Switch) findViewById(R.id.relay_switch);
+		mSwitch.setChecked(false);
+		
+		mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		    	String command = "o 0";
+				
+				if (isChecked) {
+					command = "o 1";
+				}
+
+				configureDevice(command.getBytes());
+		    }
+		});
+		
+		mActuator = mDataCenter.getCurrentActuator();
+	}
+	
+	@Override
+	protected void onServiceStateChanged(int state) {
+		if (state == UartService.STATE_CONNECTED) {
+			String command = "a " + mActuator.driver;
+			configureDevice(command.getBytes());
+			
+			command = "o 0";
+			configureDevice(command.getBytes());
+			mSwitchIsOn = false;
+		}
+	}
+	
+	public void addTask(View v) {
+		int count = mDataCenter.taskListAdapter.getCount();
+		float[] state = new float[1];
+		if (mSwitch.isChecked()) {
+			state[0] = 1;
+		} else {
+			state[0] = 0;
+		}
+		ActuatorAction action = new ActuatorAction("action " + count, state);
+		mDataCenter.taskListAdapter.add(new Task(count, mDataCenter.requirements, action));
+		
+		Intent intent = new Intent(this, NodeActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

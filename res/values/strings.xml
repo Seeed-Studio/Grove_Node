@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NODE</string>
+    <string name="app_name">Grove NODE</string>
     <string name="action_settings">Settings</string>
     <string name="action_mode">Mode</string>
     <string name="device">Device:</string>
